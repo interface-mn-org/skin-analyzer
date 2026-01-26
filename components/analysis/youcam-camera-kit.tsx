@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 
@@ -10,6 +11,7 @@ import { YOUCAM_SDK_SRC } from "@/components/analysis/youcam/types";
 import { useYoucamCameraKit } from "@/components/analysis/youcam/use-youcam-camera-kit";
 
 export function YoucamCameraKit() {
+  const router = useRouter();
   const {
     sdkLoaded,
     isSdkReady,
@@ -48,6 +50,16 @@ export function YoucamCameraKit() {
 
       <YoucamCameraViewport isOpen={isOpen} viewportRef={viewportRef} moduleRef={moduleRef} />
       <YoucamCaptureResults images={capturedImages} />
+      <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
+        <Button
+          type="button"
+          size="lg"
+          disabled={capturedImages.length === 0}
+          onClick={() => router.push("/flow/auth")}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 }

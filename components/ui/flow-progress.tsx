@@ -13,11 +13,13 @@ export function FlowProgress({
   steps,
   activeStep,
   onStepChange,
+  allowFutureSteps = false,
   className,
 }: {
   steps: FlowStep[];
   activeStep: number;
   onStepChange?: (step: number) => void;
+  allowFutureSteps?: boolean;
   className?: string;
 }) {
   const current = steps[Math.max(0, Math.min(steps.length - 1, activeStep - 1))];
@@ -37,7 +39,7 @@ export function FlowProgress({
           const stepNumber = idx + 1;
           const isActive = stepNumber === activeStep;
           const isCompleted = stepNumber < activeStep;
-          const isDisabled = stepNumber > activeStep;
+          const isDisabled = !allowFutureSteps && stepNumber > activeStep;
 
           return (
             <button

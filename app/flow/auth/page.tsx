@@ -1,10 +1,18 @@
+import { redirect } from "next/navigation";
+
 import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { auth } from "@/lib/auth";
 
-export default function AuthStepPage() {
+export default async function AuthStepPage() {
+  const session = await auth();
+  if (session?.user) {
+    redirect("/flow/payment");
+  }
+
   return (
     <section className="grid min-w-0 gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
       <div className="space-y-6">
@@ -23,7 +31,7 @@ export default function AuthStepPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
-          <SocialAuthButtons />
+          <SocialAuthButtons redirectTo="/flow/payment" />
           <div className="flex items-center gap-3">
             <Separator className="flex-1 bg-border" />
             <span className="text-xs text-muted-foreground">or email</span>

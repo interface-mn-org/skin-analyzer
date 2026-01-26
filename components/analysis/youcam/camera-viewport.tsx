@@ -24,14 +24,12 @@ export function YoucamCameraViewport({
         className
       )}
     >
-      <div
-        className={cn(
-          "absolute inset-0 transition-opacity",
-          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
-        )}
-      >
-        <div id="YMK-module" ref={moduleRef} className="ymk-hide-instructions absolute inset-0" />
-      </div>
+      <div id="YMK-module" ref={moduleRef} className="ymk-hide-instructions absolute inset-0" />
+      {!isOpen ? (
+        <div className="pointer-events-none absolute inset-0 grid place-items-center p-6 text-center text-sm text-muted-foreground">
+          Press “Open” to start the camera.
+        </div>
+      ) : null}
     </div>
   );
 }

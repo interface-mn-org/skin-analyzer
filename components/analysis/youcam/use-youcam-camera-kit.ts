@@ -54,10 +54,12 @@ export function useYoucamCameraKit() {
     const ymk = window.YMK;
     if (!ymk) return;
 
+    setIsSdkReady(true);
+
     ymk.init({
       faceDetectionMode: "skincare",
       imageFormat: "base64",
-      language: "kor",
+      language: "enu",
     });
 
     const ids: Array<string | number> = [];
@@ -145,6 +147,7 @@ export function useYoucamCameraKit() {
 
   const onScriptLoad = useCallback(() => {
     setSdkLoaded(true);
+    setIsSdkReady(Boolean(window.YMK));
     setStatus("Ready");
     window.ymkAsyncInit?.();
   }, []);
@@ -163,6 +166,8 @@ export function useYoucamCameraKit() {
       setIsOpen(false);
       return;
     }
+
+    setIsOpen(true);
 
     const rect = viewportRef.current?.getBoundingClientRect();
     const fallbackWidth = Math.max(320, window.innerWidth - (isMobile ? 32 : 120));

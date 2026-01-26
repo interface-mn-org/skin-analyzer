@@ -39,15 +39,18 @@ function FacebookIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function SocialAuthButtons() {
+export function SocialAuthButtons({ redirectTo = "/" }: { redirectTo?: string }) {
   const handleGoogleSignIn = () => {
     signIn("google", {
       redirect: true,
-      redirectTo: "/",
+      redirectTo,
     })
   }
   const handleFacebookSignIn = () => {
-    signIn("facebook")
+    signIn("facebook", {
+      redirect: true,
+      redirectTo,
+    })
   }
   return (
     <div className="grid gap-3">
