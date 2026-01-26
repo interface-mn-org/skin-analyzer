@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Tone balance">
+  <rect width="640" height="420" fill="#111827" />
+  <rect x="80" y="90" width="480" height="240" rx="32" fill="#1f2937" />
+  <path d="M110 280 L 220 170 L 340 240 L 520 140" stroke="#a78bfa" stroke-width="12" fill="none" />
+  <circle cx="220" cy="170" r="22" fill="#c4b5fd" />
+  <circle cx="340" cy="240" r="20" fill="#a78bfa" />
+  <circle cx="520" cy="140" r="18" fill="#7c3aed" />
+  <rect x="140" y="120" width="120" height="12" fill="#38bdf8" opacity="0.7" />
+  <rect x="140" y="140" width="180" height="12" fill="#22d3ee" opacity="0.7" />
+  <rect x="140" y="160" width="150" height="12" fill="#67e8f9" opacity="0.7" />
+</svg>
