@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 function QrCode() {
   return (
@@ -29,7 +29,7 @@ function QrCode() {
       <rect x="88" y="56" width="8" height="16" fill="#0f172a" />
       <rect x="104" y="56" width="8" height="16" fill="#0f172a" />
     </svg>
-  );
+  )
 }
 
 export default function PaymentStepPage() {
@@ -42,7 +42,11 @@ export default function PaymentStepPage() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Button size="lg">I have paid</Button>
-          <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-muted">
+          <Button
+            size="lg"
+            variant="outline"
+            className="border-border text-foreground hover:bg-muted"
+          >
             Need help?
           </Button>
         </div>
@@ -57,5 +61,5 @@ export default function PaymentStepPage() {
         </CardContent>
       </Card>
     </section>
-  );
+  )
 }

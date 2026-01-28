@@ -1,31 +1,24 @@
-"use client";
+'use client'
 
-import type { ReactNode } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { ReactNode } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { Button } from "@/components/ui/button";
-import { FlowProgress, type FlowStep } from "@/components/ui/flow-progress";
+import { Button } from '@/components/ui/button'
+import { FlowProgress, type FlowStep } from '@/components/ui/flow-progress'
 
 function getActiveStep(pathname: string | null, steps: FlowStep[]) {
-  if (!pathname) return 1;
-  const idx = steps.findIndex((step) => pathname.startsWith(step.href));
-  return idx === -1 ? 1 : idx + 1;
+  if (!pathname) return 1
+  const idx = steps.findIndex((step) => pathname.startsWith(step.href))
+  return idx === -1 ? 1 : idx + 1
 }
 
-export function FlowShell({
-  children,
-  steps,
-}: {
-  children: ReactNode;
-  steps: FlowStep[];
-}) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export function FlowShell({ children, steps }: { children: ReactNode; steps: FlowStep[] }) {
+  const pathname = usePathname()
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const activeStep = getActiveStep(pathname, steps);
-  const skipEnabled =
-    process.env.NODE_ENV !== "production" || searchParams.get("skip") === "1";
+  const activeStep = getActiveStep(pathname, steps)
+  const skipEnabled = process.env.NODE_ENV !== 'production' || searchParams.get('skip') === '1'
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[radial-gradient(900px_circle_at_8%_10%,rgba(14,165,233,0.16),transparent_60%),radial-gradient(700px_circle_at_92%_8%,rgba(16,185,129,0.18),transparent_55%),linear-gradient(to_bottom,rgba(255,255,255,1),rgba(248,250,252,1))] text-foreground">
@@ -46,8 +39,8 @@ export function FlowShell({
             steps={steps}
             activeStep={activeStep}
             onStepChange={(step) => {
-              const next = steps[step - 1];
-              if (next) router.push(next.href);
+              const next = steps[step - 1]
+              if (next) router.push(next.href)
             }}
             allowFutureSteps={skipEnabled}
             className="rounded-2xl border border-border bg-card/60 p-4 backdrop-blur"
@@ -61,7 +54,7 @@ export function FlowShell({
                     key={step.href}
                     type="button"
                     size="sm"
-                    variant={idx + 1 === activeStep ? "default" : "outline"}
+                    variant={idx + 1 === activeStep ? 'default' : 'outline'}
                     onClick={() => router.push(step.href)}
                   >
                     {idx + 1}
@@ -76,6 +69,5 @@ export function FlowShell({
         </main>
       </div>
     </div>
-  );
+  )
 }
-

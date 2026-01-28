@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
 export function YoucamCaptureResults({
   images,
 }: {
-  images: Array<{ src: string; phase?: number }>;
+  images: Array<{ src: string; phase?: number }>
 }) {
-  if (images.length === 0) return null;
+  if (images.length === 0) return null
 
   return (
     <div className="grid gap-3 pt-4 sm:grid-cols-2">
@@ -22,6 +22,5 @@ export function YoucamCaptureResults({
         </div>
       ))}
     </div>
-  );
+  )
 }
-

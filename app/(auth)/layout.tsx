@@ -1,14 +1,10 @@
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { auth } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
-export default async function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const session = await auth();
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const session = await auth()
   if (session?.user) {
-    redirect("/");
+    redirect('/')
   }
 
   return (
@@ -25,5 +21,5 @@ export default async function AuthLayout({
         {children}
       </div>
     </div>
-  );
+  )
 }

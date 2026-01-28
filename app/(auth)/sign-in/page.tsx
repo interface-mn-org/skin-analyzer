@@ -1,11 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { SocialAuthButtons } from '@/components/auth/social-auth-buttons'
 
 export default function SignInPage() {
   return (
@@ -21,15 +15,13 @@ export default function SignInPage() {
             Welcome back.
           </h1>
           <p className="text-muted-foreground text-base sm:text-lg">
-            Review your latest skin scans, track progress, and plan your next
-            care routine with confidence.
+            Review your latest skin scans, track progress, and plan your next care routine with
+            confidence.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card/80 p-4 shadow-xs">
-            <p className="text-sm font-medium text-foreground">
-              Daily insights
-            </p>
+            <p className="text-sm font-medium text-foreground">Daily insights</p>
             <p className="text-muted-foreground text-xs">
               Visualize hydration, texture, and tone changes in one place.
             </p>
@@ -50,14 +42,12 @@ export default function SignInPage() {
       <Card className="border-border bg-card/90 shadow-xl backdrop-blur">
         <CardHeader>
           <CardTitle>Sign in</CardTitle>
-          <CardDescription>
-            Continue with your preferred provider.
-          </CardDescription>
+          <CardDescription>Continue with your preferred provider.</CardDescription>
         </CardHeader>
         <CardContent>
           <SocialAuthButtons />
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

@@ -1,17 +1,28 @@
-"use client";
+'use client'
 
-import Script from "next/script";
-import { useRouter } from "next/navigation";
+import Script from 'next/script'
+import { useRouter } from 'next/navigation'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
-import { YoucamCameraViewport } from "@/components/analysis/youcam/camera-viewport";
-import { YoucamCaptureResults } from "@/components/analysis/youcam/capture-results";
-import { YOUCAM_SDK_SRC } from "@/components/analysis/youcam/types";
-import { useYoucamCameraKit } from "@/components/analysis/youcam/use-youcam-camera-kit";
+import { YoucamCameraViewport } from '@/components/analysis/youcam/camera-viewport'
+import { YoucamCaptureResults } from '@/components/analysis/youcam/capture-results'
+import { YOUCAM_SDK_SRC } from '@/components/analysis/youcam/types'
+import { useYoucamCameraKit } from '@/components/analysis/youcam/use-youcam-camera-kit'
+import {
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+  DialogFooter,
+  Dialog,
+} from '../ui/dialog'
+import { useState } from 'react'
+import { IconX } from '@tabler/icons-react'
+import { Spinner } from '../ui/spinner'
 
-export function YoucamCameraKit() {
-  const router = useRouter();
+export function YoucamCameraKit({ children }: { children: React.ReactNode }) {
   const {
     sdkLoaded,
     isSdkReady,
@@ -25,41 +36,49 @@ export function YoucamCameraKit() {
     handleClose,
     onScriptLoad,
     onScriptError,
-  } = useYoucamCameraKit();
+  } = useYoucamCameraKit()
+
+  const [isOpenDialog, setIsOpenDialog] = useState(false)
+
+  const handleOpenChangeDialog = (open: boolean) => {
+    console.log('openChangeDialog', open)
+    setIsOpenDialog(open)
+    if (open) {
+      handleOpen()
+    } else {
+      handleClose()
+    }
+  }
 
   return (
-    <div className="grid min-w-0 gap-4">
-      <Script
-        src={YOUCAM_SDK_SRC}
-        strategy="afterInteractive"
-        onLoad={onScriptLoad}
-        onError={onScriptError}
-      />
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <Button onClick={handleOpen} disabled={!sdkLoaded || !isSdkReady} size="lg">
-            Open
-          </Button>
-          <Button onClick={handleClose} disabled={!isOpen} size="lg" variant="outline">
-            Close
-          </Button>
-        </div>
-        <span className="text-xs text-muted-foreground">{status}</span>
-      </div>
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
-
-      <YoucamCameraViewport isOpen={isOpen} viewportRef={viewportRef} moduleRef={moduleRef} />
-      <YoucamCaptureResults images={capturedImages} />
-      <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
-        <Button
-          type="button"
-          size="lg"
-          disabled={capturedImages.length === 0}
-          onClick={() => router.push("/flow/auth")}
-        >
-          Next
-        </Button>
-      </div>
-    </div>
-  );
+    <Dialog open={isOpenDialog} onOpenChange={handleOpenChangeDialog}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent showCloseButton={false}>
+        <DialogHeader>
+          <DialogTitle>Capture your scan</DialogTitle>
+        </DialogHeader>
+        <Script
+          src={YOUCAM_SDK_SRC}
+          strategy="afterInteractive"
+          onLoad={onScriptLoad}
+          onError={onScriptError}
+        />
+        {!isSdkReady && (
+          <div className="flex items-center justify-center h-full">
+            <Spinner />
+          </div>
+        )}
+        <YoucamCameraViewport isOpen={isOpen} viewportRef={viewportRef} moduleRef={moduleRef} />
+        <YoucamCaptureResults images={capturedImages} />
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">
+              <IconX size={16} />
+              Болих
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
 }

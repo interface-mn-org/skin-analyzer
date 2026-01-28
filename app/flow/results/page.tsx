@@ -1,29 +1,30 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
+} from '@/components/ui/carousel'
 
 const results = [
   {
-    title: "Hydration map",
-    description: "Deep hydration is strong around the T-zone with mild dryness on the cheeks.",
-    src: "/results/result-1.svg",
+    title: 'Hydration map',
+    description: 'Deep hydration is strong around the T-zone with mild dryness on the cheeks.',
+    src: '/results/result-1.svg',
   },
   {
-    title: "Texture analysis",
-    description: "Visible pore texture on the forehead and mid-cheek; smoothness improves toward jawline.",
-    src: "/results/result-2.svg",
+    title: 'Texture analysis',
+    description:
+      'Visible pore texture on the forehead and mid-cheek; smoothness improves toward jawline.',
+    src: '/results/result-2.svg',
   },
   {
-    title: "Tone balance",
-    description: "Overall tone is even, with a slightly warmer area near the nose bridge.",
-    src: "/results/result-3.svg",
+    title: 'Tone balance',
+    description: 'Overall tone is even, with a slightly warmer area near the nose bridge.',
+    src: '/results/result-3.svg',
   },
-];
+]
 
 export default function ResultsStepPage() {
   return (
@@ -61,5 +62,5 @@ export default function ResultsStepPage() {
         <CarouselNext className="right-2 top-full mt-4 border-border bg-card text-foreground hover:bg-muted sm:-right-5 sm:top-1/2 sm:mt-0" />
       </Carousel>
     </section>
-  );
+  )
 }

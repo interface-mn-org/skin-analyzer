@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import type { SVGProps } from "react";
-import { signIn } from "next-auth/react";
+import type { SVGProps } from 'react'
+import { signIn } from 'next-auth/react'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
 function GoogleIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -25,7 +25,7 @@ function GoogleIcon(props: SVGProps<SVGSVGElement>) {
         d="M24 46c5.1 0 9.4-1.68 12.53-4.59l-7.07-5.5c-1.96 1.31-4.48 2.08-5.46 2.08-6.4 0-11.92-3.55-13.88-8.52l-5.94 5.86C7.2 40.8 14.9 46 24 46z"
       />
     </svg>
-  );
+  )
 }
 
 function FacebookIcon(props: SVGProps<SVGSVGElement>) {
@@ -36,18 +36,18 @@ function FacebookIcon(props: SVGProps<SVGSVGElement>) {
         d="M279.14 288l14.22-92.66h-88.91V127.41c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.2V288z"
       />
     </svg>
-  );
+  )
 }
 
-export function SocialAuthButtons({ redirectTo = "/" }: { redirectTo?: string }) {
+export function SocialAuthButtons({ redirectTo = '/' }: { redirectTo?: string }) {
   const handleGoogleSignIn = () => {
-    signIn("google", {
+    signIn('google', {
       redirect: true,
       redirectTo,
     })
   }
   const handleFacebookSignIn = () => {
-    signIn("facebook", {
+    signIn('facebook', {
       redirect: true,
       redirectTo,
     })
@@ -79,5 +79,5 @@ export function SocialAuthButtons({ redirectTo = "/" }: { redirectTo?: string })
         Continue with Facebook
       </Button>
     </div>
-  );
+  )
 }
