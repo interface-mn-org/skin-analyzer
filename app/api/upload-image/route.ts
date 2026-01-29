@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
     const uploaded = await uploadImageFile(file)
     return NextResponse.json({ ok: true, file: uploaded })
   } catch (err: unknown) {
-    console.error(err)
     const message =
       typeof err === 'object' && err !== null && 'error' in err
         ? String((err as { error: unknown }).error)
