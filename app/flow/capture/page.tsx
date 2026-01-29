@@ -1,5 +1,4 @@
-import { YoucamCameraKit } from '@/components/analysis/youcam-camera-kit'
-import { Button } from '@/components/ui/button'
+import { CameraKitDialog } from '@/components/analysis/camera-kit-dialog'
 
 export default function CaptureStepPage() {
   return (
@@ -17,9 +16,7 @@ export default function CaptureStepPage() {
           <div className="space-y-2">
             <h3 className="text-lg font-semibold text-foreground">Camera</h3>
           </div>
-          <YoucamCameraKit>
-            <Button size="lg">Open camera</Button>
-          </YoucamCameraKit>
+          <CameraKitDialog />
         </div>
       </div>
     </section>
