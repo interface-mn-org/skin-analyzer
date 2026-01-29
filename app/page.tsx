@@ -5,7 +5,7 @@ import { CreditsBalanceCard } from '@/components/credits-balance'
 import { Button } from '@/components/ui/button'
 import { landingContents } from '@/lib/contents/landing'
 
-export default function Page() {
+export default async function Page() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-background via-background to-muted/40 text-foreground">
       <div

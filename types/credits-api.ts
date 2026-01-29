@@ -36,6 +36,7 @@ export type CreatePurchaseResponse = {
   credits: number
   amount_mnt: number
   status: CreditPurchaseStatus
+  payment_url: string
   qpay: {
     invoice_id: string
     qr_text: string

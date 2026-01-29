@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { logout } from '@/lib/api/auth'
 
 export function LogoutButton() {
-  const { data, status } = useSession()
+  const { status } = useSession()
   const handleLogout = async () => {
     try {
       await logout()

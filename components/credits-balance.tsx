@@ -4,7 +4,6 @@ import { auth } from '@/lib/auth'
 export async function CreditsBalanceCard() {
   const session = await auth()
   const accessToken = session?.backendTokens?.accessToken
-  console.log('accessToken', session)
 
   if (!accessToken) {
     return (
