@@ -1,12 +1,13 @@
 import Link from 'next/link'
 
 import { LogoutButton } from '@/components/auth/logout-button'
+import { CreditsBalanceCard } from '@/components/credits-balance'
 import { Button } from '@/components/ui/button'
 import { landingContents } from '@/lib/contents/landing'
 
 export default function Page() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-background to-muted/40 text-foreground">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-background via-background to-muted/40 text-foreground">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-24 left-[-6%] h-64 w-64 rounded-full bg-primary/10 blur-3xl"
@@ -16,7 +17,8 @@ export default function Page() {
         className="pointer-events-none absolute -bottom-24 right-[-4%] h-72 w-72 rounded-full bg-muted/60 blur-3xl"
       />
       <div className="relative mx-auto flex min-h-screen w-full max-w-5xl flex-col px-6 py-16">
-        <div className="flex w-full items-center justify-end pb-8">
+        <div className="flex w-full items-center justify-between gap-3 pb-8">
+          <CreditsBalanceCard />
           <LogoutButton />
         </div>
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">

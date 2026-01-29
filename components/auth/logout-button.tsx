@@ -1,13 +1,31 @@
 'use client'
 
-import { signOut } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 import { Button } from '@/components/ui/button'
+import { logout } from '@/lib/api/auth'
 
 export function LogoutButton() {
+  const { data, status } = useSession()
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } finally {
+      await signOut()
+    }
+  }
+
+  const handleLogin = async () => {
+    await signIn('google')
+  }
+
   return (
-    <Button variant="default" onClick={() => signOut()}>
-      Log out
+    <Button
+      variant="default"
+      onClick={status === 'authenticated' ? handleLogout : handleLogin}
+      disabled={status === 'loading'}
+    >
+      {status === 'authenticated' ? 'Log out' : 'Log in'}
     </Button>
   )
 }
