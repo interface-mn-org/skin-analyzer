@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.qpay.mn',
+      },
+      {
+        protocol: 'https',
+        hostname: 'qpay.mn',
+      },
     ],
   },
   logging: {

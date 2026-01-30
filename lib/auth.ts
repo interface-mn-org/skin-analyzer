@@ -51,8 +51,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         accessToken,
       })
 
-      console.log('exchange', exchange)
-
       const mutableAccount = account as {
         backendSession?: AuthSession
         backendAuthError?: ApiError

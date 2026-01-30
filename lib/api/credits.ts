@@ -29,9 +29,6 @@ async function parseResponse<T>(res: Response): Promise<T> {
 export async function getCreditsBalance(): Promise<CreditBalanceResponse> {
   const res = await authorizedFetch(`${API_BASE}/credits/balance`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   return parseResponse(res)
@@ -40,9 +37,6 @@ export async function getCreditsBalance(): Promise<CreditBalanceResponse> {
 export async function listCreditPurchases(): Promise<ListPurchasesResponse> {
   const res = await authorizedFetch(`${API_BASE}/credits/purchases`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   return parseResponse(res)
@@ -65,9 +59,6 @@ export async function createCreditPurchase(
 export async function checkCreditPurchase(purchaseId: string): Promise<CheckPurchaseResponse> {
   const res = await authorizedFetch(`${API_BASE}/credits/purchases/${purchaseId}/check`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   return parseResponse(res)

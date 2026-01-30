@@ -4,6 +4,7 @@ export type QPayUrl = {
   name: string
   description: string
   link: string
+  logo: string
 }
 
 export type CreditBalanceResponse = {

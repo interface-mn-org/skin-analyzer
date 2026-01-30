@@ -125,7 +125,6 @@ export async function refreshSession(req: RefreshRequest): Promise<RefreshRespon
 export async function getMe(): Promise<MeResponse> {
   const res = await fetch(`${API_BASE}/auth/me`, {
     method: 'GET',
-    headers: jsonHeaders,
     credentials: 'include',
   })
 
@@ -142,7 +141,6 @@ export async function getMe(): Promise<MeResponse> {
 export async function logout(): Promise<LogoutResponse> {
   const res = await fetch(`${API_BASE}/auth/logout`, {
     method: 'POST',
-    headers: jsonHeaders,
     credentials: 'include',
   })
 

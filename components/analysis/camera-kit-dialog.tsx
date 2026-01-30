@@ -12,7 +12,7 @@ import type {
   YMKFaceDetectionCapturedResult,
   YMKFaceQualityChangedPayload,
 } from '@/types/ymk-camera-kit'
-import { IconAlertCircle, IconCheck } from '@tabler/icons-react'
+import { IconAlertCircle, IconCamera, IconCheck } from '@tabler/icons-react'
 import { Spinner } from '../ui/spinner'
 
 const YMK_SDK_URL = 'https://plugins-media.makeupar.com/v2.2-camera-kit/sdk.js'
@@ -52,10 +52,14 @@ function FaceQualityChip({ label, value }: { label: string; value: string | unde
   )
 }
 
-export function CameraKitDialog() {
+export function CameraKitDialog({
+  onCapturedImages,
+}: {
+  onCapturedImages: (images: YMKCapturedImage[]) => void
+}) {
   const [open, setOpen] = useState(false)
   const [hasOpenedOnce, setHasOpenedOnce] = useState(false)
-  const [capturedImages, setCapturedImages] = useState<YMKCapturedImage[]>([])
+
   const [faceQuality, setFaceQuality] = useState<YMKFaceQualityChangedPayload | null>(null)
   const captureListenerIdRef = useRef<YMKEventListenerId | null>(null)
   const faceQualityListenerIdRef = useRef<YMKEventListenerId | null>(null)
@@ -95,7 +99,6 @@ export function CameraKitDialog() {
         }
       }
       lastFaceQualityUpdateTsRef.current = 0
-      setCapturedImages([])
       setFaceQuality(null)
     }
     setOpen(next)
@@ -151,7 +154,7 @@ export function CameraKitDialog() {
         'faceDetectionCaptured',
         (result: unknown) => {
           const r = result as YMKFaceDetectionCapturedResult
-          setCapturedImages(r.images ?? [])
+          onCapturedImages(r.images ?? [])
         },
       )
       faceQualityListenerIdRef.current = window.YMK.addEventListener(
@@ -224,6 +227,7 @@ export function CameraKitDialog() {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   const isFaceQualityGood =
@@ -241,6 +245,7 @@ export function CameraKitDialog() {
           setOpen(true)
         }}
       >
+        <IconCamera className="size-4" />
         Open camera
       </Button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -300,24 +305,6 @@ export function CameraKitDialog() {
             >
               <IconAlertCircle className="size-5 shrink-0" />
               <span className="text-center">Бүх шалгуур ногоон болсны дараа зураг авна.</span>
-            </div>
-          )}
-          {capturedImages.length > 0 && (
-            <div className="mt-4 space-y-2">
-              <p className="text-sm font-medium text-foreground">
-                Captured ({capturedImages.length})
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {capturedImages.map((img, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element -- dynamic base64/blob from camera
-                  <img
-                    key={i}
-                    src={typeof img.image === 'string' ? img.image : URL.createObjectURL(img.image)}
-                    alt={`Capture ${i + 1}`}
-                    className="h-20 w-20 rounded object-cover"
-                  />
-                ))}
-              </div>
             </div>
           )}
         </DialogContent>

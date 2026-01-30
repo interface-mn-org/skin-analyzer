@@ -1,6 +1,8 @@
+import { Toaster } from '@/components/ui/sonner'
 import type { Metadata } from 'next'
 import { SessionProvider } from 'next-auth/react'
 import { Geist, Geist_Mono, Noto_Sans } from 'next/font/google'
+
 import './globals.css'
 
 const notoSans = Noto_Sans({ variable: '--font-sans' })
@@ -28,7 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={notoSans.variable}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          {children}
+          <Toaster position="top-center" closeButton richColors />
+        </SessionProvider>
       </body>
     </html>
   )

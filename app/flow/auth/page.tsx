@@ -1,47 +1,79 @@
-import { redirect } from 'next/navigation'
-
+import { CapturedImagePreview } from '@/components/analysis/captured-image-preview'
+import { ContinueToAnalyticsButton } from '@/components/analysis/continue-to-analytics'
 import { SocialAuthButtons } from '@/components/auth/social-auth-buttons'
+import Header from '@/components/header'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 import { auth } from '@/lib/auth'
+import { IconArrowLeft } from '@tabler/icons-react'
 
 export default async function AuthStepPage() {
   const session = await auth()
-  if (session?.user) {
-    redirect('/flow/payment')
-  }
 
   return (
-    <section className="grid min-w-0 gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-      <div className="space-y-6">
-        <div className="space-y-3">
-          <h2 className="text-2xl font-semibold sm:text-3xl">Sign in</h2>
-          <p className="text-sm text-muted-foreground">Continue to unlock results.</p>
+    <div className="flex flex-col min-h-svh">
+      {/* Header */}
+      <Header title="Authenticate" step={2} />
+
+      {/* Main Content */}
+      <main className="flex-1 px-4 py-6 md:px-8 md:py-10 pb-36 md:pb-10">
+        <div className="max-w-md mx-auto space-y-8">
+          {/* Title Section */}
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl md:text-3xl font-semibold text-foreground text-balance">
+              Continue to see your results
+            </h1>
+            <p className="text-muted-foreground text-balance">
+              Sign in with your social account to view your personalized skin analysis
+            </p>
+          </div>
+          <CapturedImagePreview />
+          {/* Auth Options */}
+          <div className="space-y-4">
+            {/* Social Auth Buttons */}
+            {session?.user ? (
+              <div>
+                <h2>Hello, {session.user.name}!</h2>
+                <ContinueToAnalyticsButton />
+              </div>
+            ) : (
+              <>
+                <SocialAuthButtons redirectTo="/flow/auth" />
+                {/* Terms */}
+                <p className="text-xs text-center text-muted-foreground text-pretty">
+                  By continuing, you agree to our{' '}
+                  <a href="#" className="underline hover:text-foreground transition-colors">
+                    Terms of Service
+                  </a>{' '}
+                  and{' '}
+                  <a href="#" className="underline hover:text-foreground transition-colors">
+                    Privacy Policy
+                  </a>
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      </main>
+
+      {/* Mobile Fixed Bottom Bar - Back Button */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 p-4 bg-background/80 backdrop-blur-md border-t">
+        <div className="max-w-2xl mx-auto">
+          <Button variant="outline" size="lg" className="w-full bg-transparent">
+            <IconArrowLeft className="size-4" />
+            Back to Capture
+          </Button>
         </div>
       </div>
-      <Card className="min-w-0 border-border bg-card/60 text-card-foreground">
-        <CardHeader>
-          <CardTitle>Continue</CardTitle>
-          <CardDescription className="text-muted-foreground">Use social or email.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          <SocialAuthButtons redirectTo="/flow/payment" />
-          <div className="flex items-center gap-3">
-            <Separator className="flex-1 bg-border" />
-            <span className="text-xs text-muted-foreground">or email</span>
-            <Separator className="flex-1 bg-border" />
-          </div>
-          <div className="space-y-3">
-            <Input placeholder="Email address" type="email" />
-            <Input placeholder="Create password" type="password" />
-            <Button className="w-full" size="lg">
-              Create account
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
+
+      {/* Desktop Back Button */}
+      <div className="hidden md:flex fixed bottom-8 left-8 right-8 gap-2 justify-between">
+        <Button variant="ghost" size="sm">
+          <IconArrowLeft className="size-4" />
+          Back
+        </Button>
+
+        <ContinueToAnalyticsButton />
+      </div>
+    </div>
   )
 }
