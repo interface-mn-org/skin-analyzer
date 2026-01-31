@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { LogoutButton } from '@/components/auth/logout-button'
 import { CreditsBalanceCard } from '@/components/credits-balance'
+import { ModeToggle } from '@/components/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { landingContents } from '@/lib/contents/landing'
 
@@ -19,7 +20,10 @@ export default async function Page() {
       <div className="relative mx-auto flex min-h-screen w-full max-w-5xl flex-col px-6 py-16">
         <div className="flex w-full items-center justify-between gap-3 pb-8">
           <CreditsBalanceCard />
-          <LogoutButton />
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <LogoutButton />
+          </div>
         </div>
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-6">

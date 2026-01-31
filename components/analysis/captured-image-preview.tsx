@@ -1,7 +1,15 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
+import { IconAlertCircle, IconArrowRight, IconCheck } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from '../ui/avatar'
 
 const CAPTURED_IMAGES_KEY = 'skin-analyzer:capture-images'
 
@@ -23,27 +31,46 @@ export function CapturedImagePreview() {
   if (!image) return null
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center items-center gap-4 py-4">
       <div className="relative">
-        <div className="size-36 rounded-full overflow-hidden border-2 border-primary/50 shadow-lg">
-          <img
-            src={image}
-            alt="Your captured face"
-            className="w-full h-full object-cover"
-            style={{ transform: 'scaleX(-1)' }}
-          />
-        </div>
-        <div className="absolute -bottom-1 -right-1 size-6 rounded-full bg-primary flex items-center justify-center">
-          <svg
-            className="size-3.5 text-primary-foreground"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-          >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        </div>
+        <Avatar size="lg" className="data-[size=lg]:size-16">
+          <AvatarImage src={image} alt="Your captured face" />
+          <AvatarFallback>CF</AvatarFallback>
+        </Avatar>
+      </div>
+
+      <IconArrowRight className="size-5 text-primary" />
+
+      <div className="relative">
+        <AvatarGroup className="-space-x-5">
+          <Avatar size="lg" className="data-[size=lg]:size-12">
+            <AvatarImage
+              src="https://plugins-media.makeupar.com/webconsultation/images/skincare-widget/img_webcm_skincare_service_survey_demo.jpg"
+              alt="@shadcn"
+            />
+            <AvatarFallback>CN</AvatarFallback>
+            <AvatarBadge className="bg-green-500">
+              <IconCheck className="size-4 text-primary-foreground" />
+            </AvatarBadge>
+          </Avatar>
+          <Avatar size="lg" className="data-[size=lg]:size-12">
+            <AvatarImage src="https://github.com/maxleiter.png" alt="@maxleiter" />
+            <AvatarFallback>LR</AvatarFallback>
+            <AvatarBadge>
+              <IconAlertCircle className="size-4 text-primary-foreground" />
+            </AvatarBadge>
+          </Avatar>
+          <Avatar size="lg" className="data-[size=lg]:size-12">
+            <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
+            <AvatarFallback>ER</AvatarFallback>
+            <AvatarBadge className="bg-red-500">
+              <IconAlertCircle className="size-4 text-red-500" />
+            </AvatarBadge>
+          </Avatar>
+          <AvatarGroupCount className="group-has-data-[size=lg]/avatar-group:size-12">
+            +3
+          </AvatarGroupCount>
+        </AvatarGroup>
       </div>
     </div>
   )

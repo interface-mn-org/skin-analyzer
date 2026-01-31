@@ -1,5 +1,7 @@
 import { cn } from '@/lib/utils';
 
+import { ModeToggle } from '@/components/mode-toggle';
+
 export default function Header({ title, step }: { title: string; step: number }) {
   const steps = [
     { title: 'Capture Image', step: 1 },
@@ -9,7 +11,13 @@ export default function Header({ title, step }: { title: string; step: number })
   ]
 
   return (
-    <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md rounded-xl px-4 py-4 md:px-8">
+    <header className="sticky top-0 z-10 bg-background/70 backdrop-blur-xl px-4 py-4 md:px-8 border-b space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold uppercase tracking-[0.35em] text-foreground">
+          Skin Analyzer
+        </p>
+        <ModeToggle />
+      </div>
       <div className="max-w-2xl mx-auto space-y-4">
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">

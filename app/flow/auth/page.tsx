@@ -5,9 +5,14 @@ import Header from '@/components/header'
 import { Button } from '@/components/ui/button'
 import { auth } from '@/lib/auth'
 import { IconArrowLeft } from '@tabler/icons-react'
+import { redirect } from 'next/navigation'
 
 export default async function AuthStepPage() {
   const session = await auth()
+
+  if (session?.user) {
+    redirect('/flow/payment')
+  }
 
   return (
     <div className="flex flex-col min-h-svh">
@@ -27,30 +32,18 @@ export default async function AuthStepPage() {
             </p>
           </div>
           <CapturedImagePreview />
-          {/* Auth Options */}
           <div className="space-y-4">
-            {/* Social Auth Buttons */}
-            {session?.user ? (
-              <div>
-                <h2>Hello, {session.user.name}!</h2>
-                <ContinueToAnalyticsButton />
-              </div>
-            ) : (
-              <>
-                <SocialAuthButtons redirectTo="/flow/auth" />
-                {/* Terms */}
-                <p className="text-xs text-center text-muted-foreground text-pretty">
-                  By continuing, you agree to our{' '}
-                  <a href="#" className="underline hover:text-foreground transition-colors">
-                    Terms of Service
-                  </a>{' '}
-                  and{' '}
-                  <a href="#" className="underline hover:text-foreground transition-colors">
-                    Privacy Policy
-                  </a>
-                </p>
-              </>
-            )}
+            <SocialAuthButtons redirectTo="/flow/auth" />
+            <p className="text-xs text-center text-muted-foreground text-pretty">
+              By continuing, you agree to our{' '}
+              <a href="#" className="underline hover:text-foreground transition-colors">
+                Terms of Service
+              </a>{' '}
+              and{' '}
+              <a href="#" className="underline hover:text-foreground transition-colors">
+                Privacy Policy
+              </a>
+            </p>
           </div>
         </div>
       </main>

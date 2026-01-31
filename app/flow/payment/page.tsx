@@ -2,10 +2,12 @@ import { CapturedImagePreview } from '@/components/analysis/captured-image-previ
 import Header from '@/components/header'
 import { CheckPurchaseButton } from '@/components/payment/check-purchase-button'
 import { Button } from '@/components/ui/button'
-import { createCreditPurchase } from '@/lib/api/credits'
+import { createCreditPurchase, getCreditsBalance } from '@/lib/api/credits'
+import { auth } from '@/lib/auth'
 import type { CreatePurchaseResponse } from '@/types/credits-api'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Image from 'next/image'
+import { redirect } from 'next/navigation'
 
 function FallbackQrCode() {
   return (
@@ -68,6 +70,22 @@ function QPayAppsRow({ urls }: { urls: CreatePurchaseResponse['qpay']['urls'] })
 }
 
 export default async function PaymentStepPage() {
+  const session = await auth()
+  if (!session?.user) {
+    redirect('/flow/capture')
+  }
+
+  const userCredits = await getCreditsBalance()
+  const hasEnoughCredits = userCredits.credits_balance >= 10
+
+  if (hasEnoughCredits) {
+    redirect('/flow/results')
+  }
+
+  return <PaymentShell />
+}
+
+async function PaymentShell() {
   let purchase: CreatePurchaseResponse | null = null
   let error: string | null = null
 
