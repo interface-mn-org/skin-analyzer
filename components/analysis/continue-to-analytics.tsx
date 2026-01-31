@@ -1,12 +1,11 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { CAPTURED_IMAGES_KEY } from '@/lib/constants'
 import { IconArrowRight } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Spinner } from '../ui/spinner'
-
-const CAPTURED_IMAGES_KEY = 'skin-analyzer:capture-images'
 
 type StoredCapture = {
   image: string
