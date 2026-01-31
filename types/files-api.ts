@@ -44,3 +44,34 @@ export type FileApiError = {
   error: string
 }
 
+// --- start-analyze (metadata-only then PUT to signed URL) ---
+
+export type StartAnalyzeFileMetadata = {
+  content_type: string
+  file_name: string
+  file_size: number
+}
+
+export type StartAnalyzeRequestBody = {
+  files: StartAnalyzeFileMetadata[]
+}
+
+export type StartAnalyzeUploadRequest = {
+  method: 'PUT'
+  url: string
+  headers: {
+    'Content-Type': string
+    'Content-Length': string
+    [key: string]: string
+  }
+}
+
+export type StartAnalyzeResponse = {
+  upload_request: StartAnalyzeUploadRequest
+  file_id: string
+}
+
+export type StartAnalyzeApiError = {
+  error: string
+}
+

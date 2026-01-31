@@ -9,16 +9,8 @@ import { ResultsMobileActions } from '@/components/results/results-mobile-action
 import { ResultsPrivacyNote } from '@/components/results/results-privacy-note'
 import { ResultsRecommendation } from '@/components/results/results-recommendation'
 import { ResultsSummary } from '@/components/results/results-summary'
-import { CAPTURED_IMAGES_KEY } from '@/lib/constants'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-
-type StoredCapture = {
-  image: string
-  width: number
-  height: number
-  phase: number
-}
 
 export function ResultsStepView() {
   const router = useRouter()
@@ -47,13 +39,6 @@ export function ResultsStepView() {
     localStorage.clear()
     sessionStorage.clear()
     router.replace('/flow/capture')
-  }
-
-  const checkCapturedImagesInSessionStorage = () => {
-    const raw = sessionStorage.getItem(CAPTURED_IMAGES_KEY)
-    if (!raw) return false
-    const images = JSON.parse(raw) as StoredCapture[]
-    return images.length > 0
   }
 
   return (

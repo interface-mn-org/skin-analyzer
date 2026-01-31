@@ -1,5 +1,6 @@
 'use client'
 
+import { startAnalyzeAndUpload } from '@/lib/api/start-analyze'
 import { CAPTURED_IMAGES_KEY } from '@/lib/constants'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -46,8 +47,14 @@ export default function ResultsStepWrapper({ children }: { children: React.React
       throw new Error(data.error || 'Upload failed')
     }
 
-    sessionStorage.removeItem(CAPTURED_IMAGES_KEY)
-    return data.file.id
+    try {
+      const id = await startAnalyzeAndUpload(file)
+      return id
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : 'Failed to start analyze')
+    } finally {
+      // sessionStorage.removeItem(CAPTURED_IMAGES_KEY)
+    }
   }
 
   useEffect(() => {
