@@ -1,6 +1,9 @@
-import { mockAnalysisResults } from '@/components/results/mock-analysis-results'
 import { ResultsByIdClient } from '@/components/results/results-by-id-client'
 import type { ResultResponse } from '@/lib/api/result'
+
+const FALLBACK_SUMMARY = 'Your analysis is ready. View the details below.'
+const FALLBACK_RECOMMENDATION =
+  'For personalized recommendations, complete a full analysis or check back after your results are processed.'
 
 type OutputItem = {
   type: string
@@ -13,7 +16,7 @@ function formatType(type: string): string {
 }
 
 function summaryFromOutput(output: OutputItem[] | undefined): string {
-  if (!output?.length) return mockAnalysisResults.overallSummary
+  if (!output?.length) return FALLBACK_SUMMARY
   const parts = output.map((item) => `${formatType(item.type)} ${item.ui_score ?? '—'}`)
   return `Analysis complete. ${parts.join(', ')}.`
 }
@@ -25,10 +28,6 @@ export function ResultsByIdView({ result }: Props) {
   const summary = summaryFromOutput(output)
 
   return (
-    <ResultsByIdClient
-      result={result}
-      summary={summary}
-      recommendation={mockAnalysisResults.recommendation}
-    />
+    <ResultsByIdClient result={result} summary={summary} recommendation={FALLBACK_RECOMMENDATION} />
   )
 }

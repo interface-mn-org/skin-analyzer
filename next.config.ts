@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
@@ -17,11 +17,6 @@ const nextConfig: NextConfig = {
         hostname: 'qpay.mn',
       },
     ],
-  },
-  logging: {
-    fetches: {
-      fullUrl: true,
-    },
   },
 }
 

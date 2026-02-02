@@ -8,7 +8,6 @@ const MIN_DIM = 300
 const MAX_DIM = 1920
 const DEFAULT_WIDTH = 360
 const DEFAULT_HEIGHT = 480
-const DEFAULT_ASPECT = DEFAULT_HEIGHT / DEFAULT_WIDTH
 const MOBILE_ASPECT = 1.5
 
 export function getCameraKitDimensions(): { width: number; height: number } {

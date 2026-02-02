@@ -1,6 +1,5 @@
 'use client'
 
-import { mockAnalysisResults } from '@/components/results/mock-analysis-results'
 import { ResultsAnalysisList } from '@/components/results/results-analysis-list'
 import { ResultsDesktopActions } from '@/components/results/results-desktop-actions'
 import { ResultsGalleryDialog } from '@/components/results/results-gallery-dialog'
@@ -11,6 +10,7 @@ import { ResultsPrivacyNote } from '@/components/results/results-privacy-note'
 import { ResultsRecommendation } from '@/components/results/results-recommendation'
 import { ResultsRevealOverlay } from '@/components/results/results-reveal-overlay'
 import { ResultsSummary } from '@/components/results/results-summary'
+import type { AnalysisImage } from '@/components/results/types'
 import { getTaskStatus } from '@/lib/api/poll-status'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -27,7 +27,7 @@ export function ResultsStepView() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
 
-  const galleryImages = mockAnalysisResults.images
+  const galleryImages: AnalysisImage[] = []
 
   const selectedImage =
     selectedImageIndex !== null && selectedImageIndex < galleryImages.length
@@ -47,7 +47,7 @@ export function ResultsStepView() {
   }
 
   const handleDownloadPDF = () => {
-    console.log('Downloading PDF report...')
+    // PDF export can be wired to actual export when backend supports it
   }
 
   const handleAnalyzeAgain = () => {
@@ -92,8 +92,8 @@ export function ResultsStepView() {
         <ResultsHeader onDownloadPDF={handleDownloadPDF} />
 
         <main className="max-w-3xl mx-auto px-4 py-8 pb-32 lg:pb-8">
-          <ResultsSummary summary={mockAnalysisResults.overallSummary} />
-          <ResultsRecommendation recommendation={mockAnalysisResults.recommendation} />
+          <ResultsSummary summary="Your analysis is being prepared. Click Reveal to view your results when ready." />
+          <ResultsRecommendation recommendation="Complete the flow to see personalized recommendations." />
           <ResultsAnalysisList
             images={galleryImages}
             onSelectImage={(index) => {

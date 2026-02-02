@@ -4,9 +4,3 @@ export interface AnalysisImage {
   title: string
   description: string
 }
-
-export interface AnalysisResults {
-  overallSummary: string
-  recommendation: string
-  images: AnalysisImage[]
-}

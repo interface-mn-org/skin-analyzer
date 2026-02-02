@@ -46,6 +46,5 @@ export async function startAnalyzeAndUpload(file: File): Promise<string> {
     const text = await putRes.text().catch(() => '')
     throw new Error(text || 'Upload to signed URL failed')
   }
-  console.log('file_id', file_id)
   return file_id
 }
