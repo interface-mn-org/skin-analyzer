@@ -33,9 +33,6 @@ export async function startAnalyzeAndUpload(file: File): Promise<string> {
 
   const data = (await res.json()) as StartAnalyzeResponse
   const { upload_request, file_id } = data
-  console.log('upload_request', upload_request)
-  console.log('file_id', file_id)
-
   const putRes = await fetch(upload_request.url, {
     method: 'PUT',
     headers: {
@@ -49,6 +46,6 @@ export async function startAnalyzeAndUpload(file: File): Promise<string> {
     const text = await putRes.text().catch(() => '')
     throw new Error(text || 'Upload to signed URL failed')
   }
-
+  console.log('file_id', file_id)
   return file_id
 }

@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
-import { ModeToggle } from '@/components/mode-toggle';
+import { ModeToggle } from '@/components/mode-toggle'
 
 export default function Header({ title, step }: { title: string; step: number }) {
   const steps = [

@@ -6,10 +6,7 @@ interface ResultsMobileActionsProps {
   onAnalyzeAgain: () => void
 }
 
-export function ResultsMobileActions({
-  onDownloadPDF,
-  onAnalyzeAgain,
-}: ResultsMobileActionsProps) {
+export function ResultsMobileActions({ onDownloadPDF, onAnalyzeAgain }: ResultsMobileActionsProps) {
   return (
     <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-md border-t border-border lg:hidden">
       <div className="max-w-3xl mx-auto flex gap-3">

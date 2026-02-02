@@ -44,7 +44,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={notoSans.variable} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-linear-to-b from-background via-background to-muted/40`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

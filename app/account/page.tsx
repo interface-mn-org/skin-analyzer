@@ -1,17 +1,13 @@
 import { redirect } from 'next/navigation'
 
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { Badge } from '@/components/ui/badge'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { getCreditsBalance, listCreditPurchases } from '@/lib/api/credits'
+import { apiListResults } from '@/lib/api/result'
 import { auth } from '@/lib/auth'
 import type { CreditPurchaseListItem } from '@/types/credits-api'
 
@@ -19,6 +15,8 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   dateStyle: 'medium',
   timeStyle: 'short',
 })
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8081'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -29,7 +27,10 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 function formatStatus(status: CreditPurchaseListItem['status']) {
   switch (status) {
     case 'PAID':
-      return { label: 'Paid', className: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30' }
+      return {
+        label: 'Paid',
+        className: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30',
+      }
     case 'PENDING':
       return {
         label: 'Pending payment',
@@ -61,10 +62,20 @@ export default async function AccountPage() {
     redirect('/')
   }
 
-  const [balance, purchasesResponse] = await Promise.all([
+  const accessToken = session?.backendTokens?.accessToken
+  if (!accessToken) {
+    redirect('/')
+  }
+
+  const [balance, purchasesResponse, resultsResponse] = await Promise.all([
     getCreditsBalance(),
     listCreditPurchases(),
+    apiListResults({ baseUrl: API_BASE, token: accessToken }).catch(() => ({ results: [] })),
   ])
+
+  const results = [...resultsResponse.results].sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+  )
 
   const purchases = [...purchasesResponse.purchases].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
@@ -90,9 +101,7 @@ export default async function AccountPage() {
               <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 {user.name || 'Account'}
               </h1>
-              <p className="text-xs text-muted-foreground sm:text-[13px]">
-                {user.email}
-              </p>
+              <p className="text-xs text-muted-foreground sm:text-[13px]">{user.email}</p>
             </div>
           </div>
           <p className="max-w-prose text-sm text-muted-foreground">
@@ -110,7 +119,9 @@ export default async function AccountPage() {
                   {user.email ?? 'Signed in'}
                 </Badge>
               </CardTitle>
-              <CardDescription>Your current balance and recent activity at a glance.</CardDescription>
+              <CardDescription>
+                Your current balance and recent activity at a glance.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-baseline gap-3">
@@ -160,9 +171,7 @@ export default async function AccountPage() {
                             <span className="font-medium text-foreground">
                               {purchase.credits} credits
                             </span>
-                            <span className="text-[11px] text-muted-foreground">
-                              {amountLabel}
-                            </span>
+                            <span className="text-[11px] text-muted-foreground">{amountLabel}</span>
                           </div>
                           <Badge
                             variant="outline"
@@ -174,9 +183,7 @@ export default async function AccountPage() {
                         <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
                           <span>{createdAt}</span>
                           {purchase.paid_at && (
-                            <span>
-                              Paid at {dateFormatter.format(new Date(purchase.paid_at))}
-                            </span>
+                            <span>Paid at {dateFormatter.format(new Date(purchase.paid_at))}</span>
                           )}
                         </div>
                       </div>
@@ -187,8 +194,48 @@ export default async function AccountPage() {
             </CardContent>
           </Card>
         </div>
+        {/* Results list */}
+        <Card className="border-border/80 bg-card/80">
+          <CardHeader className="pb-3">
+            <CardTitle>Your results</CardTitle>
+            <CardDescription>Past skin analyses. Tap one to view the full report.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {results.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                You don&apos;t have any results yet. Complete an analysis from the flow to see
+                reports here.
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {results.map((item) => {
+                  if (item.status !== 'success') {
+                    return null
+                  }
+                  return (
+                    <li key={item.id}>
+                      <Link
+                        href={`/account/results/${item.id}`}
+                        className="block rounded-lg border border-border/80 bg-background/60 px-3 py-2.5 text-sm transition-colors hover:bg-muted/50"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="font-medium text-foreground">Analysis #{item.id}</span>
+                          <Badge variant="outline" className="text-xs font-normal capitalize">
+                            {item.status}
+                          </Badge>
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {dateFormatter.format(new Date(item.created_at))}
+                        </p>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
 }
-

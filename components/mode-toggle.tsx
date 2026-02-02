@@ -2,12 +2,7 @@
 
 import * as React from 'react'
 import { useTheme } from 'next-themes'
-import {
-  IconCheck,
-  IconDeviceDesktop,
-  IconMoon,
-  IconSun,
-} from '@tabler/icons-react'
+import { IconCheck, IconDeviceDesktop, IconMoon, IconSun } from '@tabler/icons-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -34,21 +29,12 @@ export function ModeToggle() {
   }
 
   const currentIcon =
-    resolvedTheme === 'dark' ? (
-      <IconMoon className="size-4" />
-    ) : (
-      <IconSun className="size-4" />
-    )
+    resolvedTheme === 'dark' ? <IconMoon className="size-4" /> : <IconSun className="size-4" />
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-9"
-          aria-label="Toggle theme"
-        >
+        <Button variant="ghost" size="icon" className="size-9" aria-label="Toggle theme">
           {currentIcon}
         </Button>
       </DropdownMenuTrigger>

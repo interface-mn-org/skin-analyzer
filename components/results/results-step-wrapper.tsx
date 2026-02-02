@@ -1,5 +1,6 @@
 'use client'
 
+import { createTask } from '@/lib/api/create-task'
 import { startAnalyzeAndUpload } from '@/lib/api/start-analyze'
 import { CAPTURED_IMAGES_KEY } from '@/lib/constants'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -25,7 +26,10 @@ export default function ResultsStepWrapper({ children }: { children: React.React
     return images
   }
 
-  const uploadImagesToServer = async (): Promise<string | null> => {
+  const uploadImagesToServer = async (): Promise<{
+    youCamFileId: string
+    taskId: string
+  } | null> => {
     const images = getImagesFromSessionStorage()
     if (!images.length || !images[0]?.image) {
       throw new Error('No captured image found. Please capture again.')
@@ -47,14 +51,16 @@ export default function ResultsStepWrapper({ children }: { children: React.React
       throw new Error(data.error || 'Upload failed')
     }
 
-    try {
-      const id = await startAnalyzeAndUpload(file)
-      return id
-    } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to start analyze')
-    } finally {
-      // sessionStorage.removeItem(CAPTURED_IMAGES_KEY)
-    }
+    const photoFileId = data.file.id
+    const youCamFileId = await startAnalyzeAndUpload(file)
+
+    const taskId = await createTask({
+      src_file_id: youCamFileId,
+      dst_actions: ['wrinkle', 'pore', 'texture', 'acne'],
+      photo_file_id: photoFileId,
+    })
+
+    return { youCamFileId, taskId }
   }
 
   useEffect(() => {
@@ -64,9 +70,12 @@ export default function ResultsStepWrapper({ children }: { children: React.React
     }
 
     uploadImagesToServer()
-      .then((id) => {
-        if (id) {
-          router.push(`/flow/results?id=${id}`)
+      .then((result) => {
+        if (result) {
+          const params = new URLSearchParams()
+          params.set('id', result.youCamFileId)
+          params.set('taskId', result.taskId)
+          router.replace(`/flow/results?${params.toString()}`)
         }
       })
       .catch((error) => {

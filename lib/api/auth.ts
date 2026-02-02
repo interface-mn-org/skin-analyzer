@@ -1,10 +1,10 @@
 import type {
-    ExchangeRequest,
-    ExchangeResponse,
-    LogoutResponse,
-    MeResponse,
-    RefreshRequest,
-    RefreshResponse,
+  ExchangeRequest,
+  ExchangeResponse,
+  LogoutResponse,
+  MeResponse,
+  RefreshRequest,
+  RefreshResponse,
 } from '@/types/auth'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8081'

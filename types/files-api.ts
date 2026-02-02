@@ -75,3 +75,45 @@ export type StartAnalyzeApiError = {
   error: string
 }
 
+// --- create-task ---
+
+export type CreateTaskRequestBody = {
+  src_file_id: string
+  dst_actions: string[]
+  photo_file_id?: string
+}
+
+export type CreateTaskResponse = {
+  task_id: string
+}
+
+export type CreateTaskApiError = {
+  error: string
+}
+
+// --- poll-status ---
+
+export type TaskStatus = 'pending' | 'processing' | 'success' | 'failed'
+
+/** One item from results.output (e.g. texture, pore, acne, wrinkle, all, skin_age, resize_image) */
+export type OutputItem = {
+  type: string
+  url?: string | null
+  mask_urls?: string[]
+  ui_score?: number
+  raw_score?: number
+  score?: number
+}
+
+export type PollStatusData = {
+  task_status: TaskStatus
+  results?: {
+    output?: OutputItem[]
+  }
+  error_code?: string
+  result_id?: string
+}
+
+export type PollStatusResponse = {
+  data: PollStatusData
+}
