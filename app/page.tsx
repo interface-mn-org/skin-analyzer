@@ -26,7 +26,7 @@ export default function LandingPage() {
 
             {/* Headline */}
             <h1 className="text-4xl font-semibold leading-tight tracking-tight text-foreground md:text-5xl lg:text-6xl text-balance">
-              Арьсны тань бодит боломжийг нээгээрэй
+              Арьсныхаа бодит боломжийг нээ
             </h1>
 
             {/* Subheadline */}
@@ -47,7 +47,7 @@ export default function LandingPage() {
 
             {/* Pricing hint */}
             <p className="mt-4 text-sm text-muted-foreground">
-              Нэг удаагийн шинжилгээ: ₮5,000 ☕️ — CU кофеийн үнэтэй ойролцоо.
+              Нэг удаагийн шинжилгээ: ₮5,000 ☕️ — CU кофеийн үнэ.
             </p>
           </div>
 
