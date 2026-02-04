@@ -10,12 +10,12 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ tas
   const accessToken = session?.backendTokens?.accessToken
 
   if (!accessToken) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    return NextResponse.json({ error: 'Нэвтэрсэн эрх баталгаажаагүй байна.' }, { status: 401 })
   }
 
   const { taskId } = await params
   if (!taskId) {
-    return NextResponse.json({ error: 'taskId is required' }, { status: 400 })
+    return NextResponse.json({ error: 'taskId заавал шаардлагатай.' }, { status: 400 })
   }
 
   try {
@@ -31,13 +31,13 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ tas
 
     const data = (await res.json()) as PollStatusResponse
     if (!data?.data) {
-      return NextResponse.json({ error: 'Invalid poll-status response' }, { status: 502 })
+      return NextResponse.json({ error: 'poll-status хариу мэдээлэл хүчингүй байна.' }, { status: 502 })
     }
 
     return NextResponse.json(data)
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Poll status failed' },
+      { error: err instanceof Error ? err.message : 'Төлөв шалгахад алдаа гарлаа.' },
       { status: 500 },
     )
   }

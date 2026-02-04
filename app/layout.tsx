@@ -2,25 +2,20 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import type { Metadata, Viewport } from 'next'
 import { SessionProvider } from 'next-auth/react'
-import { Geist, Geist_Mono, Noto_Sans } from 'next/font/google'
+import { Manrope, Noto_Sans } from 'next/font/google'
 
 import './globals.css'
 
 const notoSans = Noto_Sans({ variable: '--font-sans' })
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const manrope = Manrope({
+  variable: '--font-manrope',
   subsets: ['latin'],
 })
 
 export const metadata: Metadata = {
-  title: 'Skin Analyzer',
-  description: 'Skin analysis and personalized recommendations',
+  title: 'Арьсны шинжилгээ',
+  description: 'Арьсны шинжилгээ болон хувь хүнд тохируулсан зөвлөмж',
 }
 
 export const viewport: Viewport = {
@@ -43,9 +38,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={notoSans.variable} suppressHydrationWarning>
+    <html lang="mn" className={manrope.variable} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-linear-to-b from-background via-background to-muted/40`}
+        className={`${manrope.variable} antialiased bg-linear-to-b from-background via-background to-muted/40`}
       >
         <ThemeProvider
           attribute="class"

@@ -8,24 +8,25 @@ export async function POST(req: NextRequest) {
   const accessToken = session?.backendTokens?.accessToken
 
   if (!accessToken) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    return NextResponse.json({ error: 'Нэвтэрсэн эрх баталгаажаагүй байна.' }, { status: 401 })
   }
 
   const formData = await req.formData()
   const file = formData.get('file')
 
   if (!file || !(file instanceof File)) {
-    return NextResponse.json({ error: 'file is required' }, { status: 400 })
+    return NextResponse.json({ error: 'Файл заавал шаардлагатай.' }, { status: 400 })
   }
 
   try {
     const uploaded = await uploadImageFile(file)
     return NextResponse.json({ ok: true, file: uploaded })
   } catch (err: unknown) {
+    console.error(err)
     const message =
       typeof err === 'object' && err !== null && 'error' in err
         ? String((err as { error: unknown }).error)
-        : 'Upload failed'
+        : 'Байршуулахад алдаа гарлаа.'
 
     return NextResponse.json({ error: message }, { status: 400 })
   }

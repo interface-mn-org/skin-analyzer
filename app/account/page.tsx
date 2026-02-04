@@ -11,14 +11,14 @@ import { apiListResults } from '@/lib/api/result'
 import { auth } from '@/lib/auth'
 import type { CreditPurchaseListItem } from '@/types/credits-api'
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
+const dateFormatter = new Intl.DateTimeFormat('mn-MN', {
   dateStyle: 'medium',
   timeStyle: 'short',
 })
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8081'
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
+const currencyFormatter = new Intl.NumberFormat('mn-MN', {
   style: 'currency',
   currency: 'MNT',
   maximumFractionDigits: 0,
@@ -28,22 +28,22 @@ function formatStatus(status: CreditPurchaseListItem['status']) {
   switch (status) {
     case 'PAID':
       return {
-        label: 'Paid',
+        label: 'Төлсөн',
         className: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30',
       }
     case 'PENDING':
       return {
-        label: 'Pending payment',
+        label: 'Төлбөр хүлээгдэж байна',
         className: 'bg-amber-500/10 text-amber-500 border-amber-500/30',
       }
     case 'CANCELLED':
       return {
-        label: 'Cancelled',
+        label: 'Цуцлагдсан',
         className: 'bg-muted text-muted-foreground border-border/60',
       }
     case 'EXPIRED':
       return {
-        label: 'Expired',
+        label: 'Хугацаа дууссан',
         className: 'bg-destructive/10 text-destructive border-destructive/30',
       }
     default:
@@ -90,7 +90,7 @@ export default async function AccountPage() {
               <div className="relative h-10 w-10 overflow-hidden rounded-full border border-border/70 bg-muted">
                 <Image
                   src={user.avatarUrl}
-                  alt={user.name ?? user.email ?? 'User avatar'}
+                  alt={user.name ?? user.email ?? 'Хэрэглэгчийн зураг'}
                   fill
                   className="object-cover"
                   sizes="40px"
@@ -99,14 +99,14 @@ export default async function AccountPage() {
             )}
             <div>
               <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                {user.name || 'Account'}
+                {user.name || 'Данс'}
               </h1>
               <p className="text-xs text-muted-foreground sm:text-[13px]">{user.email}</p>
             </div>
           </div>
           <p className="max-w-prose text-sm text-muted-foreground">
-            View your current credit balance and payment history. This page gives you a clear,
-            minimal overview of how you&apos;ve been using Skin Analyzer.
+            Кредитийн үлдэгдэл болон төлбөрийн түүхээ эндээс харна уу. Энэ хуудас нь Арьсны
+            шинжилгээг хэрхэн ашиглаж буй тань талаар товч, ойлгомжтой тоймыг өгнө.
           </p>
         </div>
 
@@ -114,45 +114,45 @@ export default async function AccountPage() {
           <Card className="border-border/80 bg-card/80">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center justify-between gap-3">
-                <span>Credits overview</span>
+                <span>Кредитийн тойм</span>
                 <Badge variant="outline" className="text-xs font-normal">
-                  {user.email ?? 'Signed in'}
+                  {user.email ?? 'Нэвтэрсэн'}
                 </Badge>
               </CardTitle>
               <CardDescription>
-                Your current balance and recent activity at a glance.
+                Одоогийн үлдэгдэл болон сүүлийн үйл ажиллагааг нэг дор.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-baseline gap-3">
                 <span className="text-sm uppercase tracking-[0.18em] text-muted-foreground">
-                  Available credits
+                  Боломжит кредит
                 </span>
               </div>
               <div className="flex items-end gap-3">
                 <span className="text-4xl font-semibold leading-none tracking-tight sm:text-5xl">
                   {balance.credits_balance}
                 </span>
-                <span className="pb-1 text-sm text-muted-foreground">credits</span>
+                <span className="pb-1 text-sm text-muted-foreground">кредит</span>
               </div>
               <Separator />
               <p className="text-xs text-muted-foreground">
-                Each analysis consumes a small number of credits. When your balance runs low,
-                purchase additional credits to keep using Skin Analyzer without interruption.
+                Нэг шинжилгээ тодорхой тооны кредит зарцуулна. Үлдэгдэл багассан тохиолдолд нэмэлт
+                кредит худалдан авч, Арьсны шинжилгээг тасалдалгүй үргэлжлүүлнэ үү.
               </p>
             </CardContent>
           </Card>
 
           <Card className="border-border/80 bg-card/80">
             <CardHeader className="pb-3">
-              <CardTitle>Payment history</CardTitle>
-              <CardDescription>Your most recent credit purchases.</CardDescription>
+              <CardTitle>Төлбөрийн түүх</CardTitle>
+              <CardDescription>Сүүлийн үеийн кредит худалдан авалтууд.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {purchases.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  You haven&apos;t purchased any credits yet. Once you do, they&apos;ll show up here
-                  with status and timestamps.
+                  Та одоогоор кредит худалдан аваагүй байна. Худалдан авалт хиймэгц энд төлөв ба
+                  цагийн тэмдэглэгээтэйгээр харагдана.
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -169,7 +169,7 @@ export default async function AccountPage() {
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
                             <span className="font-medium text-foreground">
-                              {purchase.credits} credits
+                              {purchase.credits} кредит
                             </span>
                             <span className="text-[11px] text-muted-foreground">{amountLabel}</span>
                           </div>
@@ -183,7 +183,9 @@ export default async function AccountPage() {
                         <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
                           <span>{createdAt}</span>
                           {purchase.paid_at && (
-                            <span>Paid at {dateFormatter.format(new Date(purchase.paid_at))}</span>
+                            <span>
+                              Төлсөн: {dateFormatter.format(new Date(purchase.paid_at))}
+                            </span>
                           )}
                         </div>
                       </div>
@@ -197,14 +199,15 @@ export default async function AccountPage() {
         {/* Results list */}
         <Card className="border-border/80 bg-card/80">
           <CardHeader className="pb-3">
-            <CardTitle>Your results</CardTitle>
-            <CardDescription>Past skin analyses. Tap one to view the full report.</CardDescription>
+            <CardTitle>Таны үр дүн</CardTitle>
+            <CardDescription>
+              Өмнөх арьсны шинжилгээнүүд. Нэгийг дарж бүрэн тайланг үзнэ үү.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {results.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                You don&apos;t have any results yet. Complete an analysis from the flow to see
-                reports here.
+                Одоогоор үр дүн алга. Урсгалаар шинжилгээ дуусгасны дараа тайлангууд энд харагдана.
               </p>
             ) : (
               <ul className="space-y-2">
@@ -219,7 +222,9 @@ export default async function AccountPage() {
                         className="block rounded-lg border border-border/80 bg-background/60 px-3 py-2.5 text-sm transition-colors hover:bg-muted/50"
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          <span className="font-medium text-foreground">Analysis #{item.id}</span>
+                          <span className="font-medium text-foreground">
+                            Шинжилгээ #{item.id}
+                          </span>
                           <Badge variant="outline" className="text-xs font-normal capitalize">
                             {item.status}
                           </Badge>

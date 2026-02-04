@@ -10,18 +10,18 @@ export async function POST(req: NextRequest) {
   const accessToken = session?.backendTokens?.accessToken
 
   if (!accessToken) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    return NextResponse.json({ error: 'Нэвтэрсэн эрх баталгаажаагүй байна.' }, { status: 401 })
   }
 
   let body: StartAnalyzeRequestBody
   try {
     body = (await req.json()) as StartAnalyzeRequestBody
   } catch {
-    return NextResponse.json({ error: 'files metadata is required' }, { status: 400 })
+    return NextResponse.json({ error: 'Файлын мета өгөгдөл заавал шаардлагатай.' }, { status: 400 })
   }
 
   if (!body?.files?.length) {
-    return NextResponse.json({ error: 'files metadata is required' }, { status: 400 })
+    return NextResponse.json({ error: 'Файлын мета өгөгдөл заавал шаардлагатай.' }, { status: 400 })
   }
 
   try {
@@ -38,13 +38,16 @@ export async function POST(req: NextRequest) {
 
     const data = (await res.json()) as StartAnalyzeResponse
     if (!data.upload_request?.url || !data.file_id) {
-      return NextResponse.json({ error: 'Invalid upload metadata response' }, { status: 502 })
+      return NextResponse.json(
+        { error: 'Байршуулах мета өгөгдлийн хариу хүчингүй байна.' },
+        { status: 502 },
+      )
     }
 
     return NextResponse.json(data)
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Start analyze failed' },
+      { error: err instanceof Error ? err.message : 'Шинжилгээг эхлүүлэхэд алдаа гарлаа.' },
       { status: 500 },
     )
   }

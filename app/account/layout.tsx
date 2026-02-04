@@ -12,14 +12,14 @@ export default function AccountLayout({ children }: { children: ReactNode }) {
             href="/"
             className="text-xs font-semibold uppercase tracking-[0.35em] text-foreground transition-colors hover:text-muted-foreground"
           >
-            Skin Analyzer
+            Арьсны шинжилгээ
           </Link>
           <div className="flex items-center gap-2">
             <Link
               href="/account"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
-              Account
+              Данс
             </Link>
             <ModeToggle />
           </div>

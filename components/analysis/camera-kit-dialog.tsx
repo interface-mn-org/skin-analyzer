@@ -246,14 +246,14 @@ export function CameraKitDialog({
         }}
       >
         <IconCamera className="size-4" />
-        Open camera
+        Камераа нээх
       </Button>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent
           className="max-h-[calc(100vh-2rem)] overflow-y-auto p-0 bg-transparent border-none outline-none ring-0"
           showCloseButton={false}
         >
-          <DialogTitle className="sr-only">Camera capture</DialogTitle>
+          <DialogTitle className="sr-only">Камераа зурах</DialogTitle>
           {faceQuality && (
             <div
               className="absolute z-20 h-22 overflow-x-auto rounded-t-lg bg-black px-3 py-2 ring-1 ring-white/10 flex flex-col flex-nowrap justify-between"

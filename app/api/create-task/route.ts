@@ -10,18 +10,21 @@ export async function POST(req: NextRequest) {
   const accessToken = session?.backendTokens?.accessToken
 
   if (!accessToken) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    return NextResponse.json({ error: 'Нэвтэрсэн эрх баталгаажаагүй байна.' }, { status: 401 })
   }
 
   let body: CreateTaskRequestBody
   try {
     body = (await req.json()) as CreateTaskRequestBody
   } catch {
-    return NextResponse.json({ error: 'Request body is required' }, { status: 400 })
+    return NextResponse.json({ error: 'Хүсэлтийн бие заавал шаардлагатай.' }, { status: 400 })
   }
 
   if (!body?.src_file_id || !Array.isArray(body.dst_actions)) {
-    return NextResponse.json({ error: 'src_file_id and dst_actions are required' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'src_file_id болон dst_actions заавал шаардлагатай.' },
+      { status: 400 },
+    )
   }
 
   try {
@@ -42,13 +45,13 @@ export async function POST(req: NextRequest) {
 
     const data = (await res.json()) as CreateTaskResponse
     if (!data.task_id) {
-      return NextResponse.json({ error: 'Invalid create-task response' }, { status: 502 })
+      return NextResponse.json({ error: 'create-task хариу мэдээлэл хүчингүй байна.' }, { status: 502 })
     }
 
     return NextResponse.json(data)
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Create task failed' },
+      { error: err instanceof Error ? err.message : 'Даалгавар үүсгэхэд алдаа гарлаа.' },
       { status: 500 },
     )
   }

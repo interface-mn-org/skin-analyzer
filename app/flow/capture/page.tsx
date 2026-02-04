@@ -30,7 +30,7 @@ export default function FaceCapture() {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader()
       reader.onload = () => resolve(String(reader.result))
-      reader.onerror = () => reject(new Error('Failed to read image'))
+      reader.onerror = () => reject(new Error('Зургийг уншихад алдаа гарлаа.'))
       reader.readAsDataURL(image.image as Blob)
     })
   }
@@ -50,7 +50,7 @@ export default function FaceCapture() {
       sessionStorage.setItem(CAPTURED_IMAGES_KEY, JSON.stringify(serialized))
       router.push('/flow/auth')
     } catch (error) {
-      console.error('Failed to store captured images', error)
+      console.error('Авсан зургуудыг хадгалахад алдаа гарлаа.', error)
     } finally {
       setIsSaving(false)
     }
@@ -59,7 +59,7 @@ export default function FaceCapture() {
   return (
     <div className="flex flex-col min-h-svh">
       {/* Header */}
-      <Header title="Capture Image" step={1} />
+      <Header title="Зураг авах" step={1} />
 
       {/* Main Content */}
       <main className="flex-1 px-4 py-6 md:px-8 md:py-10 pb-36 md:pb-10">
@@ -67,10 +67,11 @@ export default function FaceCapture() {
           {/* Title Section */}
           <div className="text-center space-y-2">
             <h1 className="text-2xl md:text-3xl font-semibold text-foreground text-balance">
-              Let&apos;s capture your face
+              Нүүрний зургийг авна уу
             </h1>
             <p className="text-muted-foreground text-balance">
-              Position your face in good lighting for the best analysis results
+              Шинжилгээний хамгийн сайн үр дүнд хүрэхийн тулд нүүрээ хангалттай гэрэлтэй орчинд
+              байрлуулна уу.
             </p>
           </div>
 
@@ -89,9 +90,9 @@ export default function FaceCapture() {
                     <IconCamera className="size-10 text-muted-foreground" />
                   </div>
                   <div className="text-center space-y-1">
-                    <p className="font-medium text-foreground">No photo yet</p>
+                    <p className="font-medium text-foreground">Одоогоор зураг алга</p>
                     <p className="text-sm text-muted-foreground">
-                      Open your camera to take a selfie
+                      Селфи авахын тулд камераа нээнэ үү.
                     </p>
                   </div>
                   <CameraKitDialog onCapturedImages={onCapturedImages} />
@@ -103,7 +104,7 @@ export default function FaceCapture() {
                 <>
                   <img
                     src={capturedImages[0].image || '/placeholder.svg'}
-                    alt={`Captured face ${capturedImages[0].phase}`}
+                    alt={`Авсан нүүрний зураг ${capturedImages[0].phase}`}
                     className="absolute inset-0 w-full h-full object-cover"
                     style={{ transform: 'scaleX(-1)' }}
                   />
@@ -111,7 +112,7 @@ export default function FaceCapture() {
                   <div className="absolute top-4 left-1/2 -translate-x-1/2">
                     <Badge variant="secondary">
                       <IconCheck className="size-4 text-primary" />
-                      <span className="text-sm font-medium">Photo captured</span>
+                      <span className="text-sm font-medium">Зураг амжилттай авлаа</span>
                     </Badge>
                   </div>
                   {/* Retake Button */}
@@ -122,7 +123,7 @@ export default function FaceCapture() {
                     className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm"
                   >
                     <IconRefresh className="size-4" />
-                    Retake
+                    Дахин авах
                   </Button>
                 </>
               )}
@@ -133,8 +134,7 @@ export default function FaceCapture() {
           <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 border">
             <IconShield className="size-5 text-muted-foreground shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground text-pretty">
-              We do not store your image. It is only used once to analyze your skin and then
-              discarded.
+              Таны зургийг бид хадгалдаггүй. Арьсны шинжилгээнд нэг удаа ашиглаад дараа нь устгана.
             </p>
           </div>
 
@@ -146,7 +146,7 @@ export default function FaceCapture() {
               size="lg"
               className="min-w-48"
             >
-              Continue to Analysis
+              Үргэлжлүүлэх
               <IconArrowRight className="size-4" />
             </Button>
           </div>
@@ -162,7 +162,7 @@ export default function FaceCapture() {
             size="lg"
             className="w-full"
           >
-            Continue to Analysis
+            Үргэлжлүүлэх
             <IconArrowRight className="size-4" />
           </Button>
         </div>

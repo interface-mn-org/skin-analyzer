@@ -32,7 +32,7 @@ export default function ResultsStepWrapper({ children }: { children: React.React
   } | null> => {
     const images = getImagesFromSessionStorage()
     if (!images.length || !images[0]?.image) {
-      throw new Error('No captured image found. Please capture again.')
+      throw new Error('Зураг авсан мэдээлэл олдсонгүй. Дахин зураг авна уу.')
     }
 
     const blob = await fetch(images[0].image).then((res) => res.blob())
@@ -48,7 +48,7 @@ export default function ResultsStepWrapper({ children }: { children: React.React
     })
     const data = (await res.json()) as { ok?: boolean; file?: { id?: string }; error?: string }
     if (!res.ok || !data.ok || !data.file?.id) {
-      throw new Error(data.error || 'Upload failed')
+      throw new Error(data.error || 'Байршуулахад алдаа гарлаа.')
     }
 
     const photoFileId = data.file.id
@@ -79,7 +79,9 @@ export default function ResultsStepWrapper({ children }: { children: React.React
         }
       })
       .catch((error) => {
-        toast.error(error instanceof Error ? error.message : 'Failed to upload images to server')
+        toast.error(
+          error instanceof Error ? error.message : 'Зургуудыг серверт байршуулахад алдаа гарлаа.',
+        )
         router.push('/flow/capture')
       })
       .finally(() => {

@@ -67,6 +67,8 @@ export async function uploadImageFile(file: File): Promise<UploadImageResult> {
   }
 
   const { file: createdFile, upload_url, headers } = await requestFileUpload(requestBody)
+  console.log('upload_url', upload_url)
+  console.log('headers', headers)
   const s3Res = await fetch(upload_url, {
     method: 'PUT',
     headers,
@@ -75,7 +77,7 @@ export async function uploadImageFile(file: File): Promise<UploadImageResult> {
   if (!s3Res.ok) {
     const text = await s3Res.text().catch(() => '')
     throw {
-      error: text || 'S3 upload failed',
+      error: text || 'S3 руу байршуулахад алдаа гарлаа.',
     } satisfies FileApiError
   }
 

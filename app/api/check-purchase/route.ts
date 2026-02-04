@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   const accessToken = session?.backendTokens?.accessToken
 
   if (!accessToken) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    return NextResponse.json({ error: 'Нэвтэрсэн эрх баталгаажаагүй байна.' }, { status: 401 })
   }
 
   const { purchaseId } = (await req.json().catch(() => ({}))) as {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (!purchaseId) {
-    return NextResponse.json({ error: 'purchaseId is required' }, { status: 400 })
+    return NextResponse.json({ error: 'purchaseId заавал шаардлагатай.' }, { status: 400 })
   }
 
   try {
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     const message =
       typeof err === 'object' && err !== null && 'error' in err
         ? String((err as { error: unknown }).error)
-        : 'Check failed'
+        : 'Шалгалт амжилтгүй боллоо.'
 
     return NextResponse.json({ error: message }, { status: 400 })
   }

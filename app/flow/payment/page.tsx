@@ -14,7 +14,7 @@ function FallbackQrCode() {
     <svg
       viewBox="0 0 200 200"
       role="img"
-      aria-label="Payment QR code"
+      aria-label="Төлбөрийн QR код"
       className="h-48 w-48 rounded-2xl bg-background p-4"
     >
       <rect width="200" height="200" fill="#ffffff" />
@@ -92,22 +92,22 @@ async function PaymentShell() {
   try {
     purchase = await createCreditPurchase({ credits: 10 })
   } catch (e) {
-    error = 'Failed to create payment. Please try again.'
-    console.error('Failed to create credit purchase', e)
+    error = 'Төлбөр үүсгэхэд алдаа гарлаа. Дахин оролдоно уу.'
+    console.error('Кредит худалдан авалт үүсгэхэд алдаа гарлаа.', e)
   }
   return (
     <div className="flex flex-col min-h-svh">
-      <Header title="Payment" step={3} />
+      <Header title="Төлбөр" step={3} />
       <main className="flex-1 px-4 py-6 md:px-8 md:py-10 pb-36 md:pb-10">
         <div className="max-w-md mx-auto space-y-8">
           {/* Title Section */}
           <div className="text-center space-y-2">
             <h1 className="text-2xl md:text-3xl font-semibold text-foreground text-balance">
-              Continue to see your results
+              Үр дүнгээ харахын тулд үргэлжлүүлнэ үү
             </h1>
             <p className="text-sm text-muted-foreground">
-              Purchase <span className="font-medium text-foreground">10 credits</span> and continue
-              your analysis.
+              <span className="font-medium text-foreground">10 кредит</span> худалдан авч
+              шинжилгээгээ үргэлжлүүлнэ үү.
             </p>
           </div>
           <CapturedImagePreview />
@@ -124,7 +124,7 @@ async function PaymentShell() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`data:image/png;base64,${purchase.qpay.qr_image}`}
-                        alt="QPay payment QR"
+                        alt="QPay төлбөрийн QR"
                         className="rounded-2xl bg-background object-contain p-2 shadow-sm size-full"
                       />
                     </div>
@@ -139,7 +139,7 @@ async function PaymentShell() {
                 <div className="flex w-full flex-col items-center gap-2">
                   <Button asChild size="sm" className="w-full sm:w-auto" variant="outline">
                     <a href={purchase.payment_url} target="_blank" rel="noreferrer">
-                      Open in QPay
+                      QPay-ээр нээх
                     </a>
                   </Button>
                 </div>
@@ -155,7 +155,7 @@ async function PaymentShell() {
         <div className="max-w-2xl mx-auto flex gap-2">
           <Button variant="outline" size="lg" className="flex-1 bg-transparent mb-2">
             <IconArrowLeft className="size-4" />
-            Back to Capture
+            Зураг авах руу буцах
           </Button>
           <CheckPurchaseButton
             purchaseId={purchase?.purchase_id}
@@ -169,7 +169,7 @@ async function PaymentShell() {
       <div className="hidden md:flex fixed bottom-8 left-8 right-8 gap-2 justify-between">
         <Button variant="ghost" size="sm">
           <IconArrowLeft className="size-4" />
-          Back
+          Буцах
         </Button>
         <CheckPurchaseButton purchaseId={purchase?.purchase_id} disabled={!purchase || !!error} />
       </div>

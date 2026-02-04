@@ -8,7 +8,7 @@ export async function GET() {
   const accessToken = session?.backendTokens?.accessToken
 
   if (!accessToken) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    return NextResponse.json({ error: 'Нэвтэрсэн эрх баталгаажаагүй байна.' }, { status: 401 })
   }
 
   try {
@@ -18,7 +18,7 @@ export async function GET() {
     const message =
       typeof err === 'object' && err !== null && 'error' in err
         ? String((err as { error: unknown }).error)
-        : 'Unable to fetch credits balance'
+        : 'Кредитийн үлдэгдлийг авахад алдаа гарлаа.'
 
     return NextResponse.json({ error: message }, { status: 400 })
   }

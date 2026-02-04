@@ -17,7 +17,7 @@ export default async function AuthStepPage() {
   return (
     <div className="flex flex-col min-h-svh">
       {/* Header */}
-      <Header title="Authenticate" step={2} />
+      <Header title="Нэвтрэлт" step={2} />
 
       {/* Main Content */}
       <main className="flex-1 px-4 py-6 md:px-8 md:py-10 pb-36 md:pb-10">
@@ -25,23 +25,23 @@ export default async function AuthStepPage() {
           {/* Title Section */}
           <div className="text-center space-y-2">
             <h1 className="text-2xl md:text-3xl font-semibold text-foreground text-balance">
-              Continue to see your results
+              Үр дүнгээ харахын тулд үргэлжлүүлнэ үү
             </h1>
             <p className="text-muted-foreground text-balance">
-              Sign in with your social account to view your personalized skin analysis
+              Хувьчилсан арьсны шинжилгээгээ үзэхийн тулд нийгмийн сүлжээний бүртгэлээрээ нэвтэрнэ үү
             </p>
           </div>
           <CapturedImagePreview />
           <div className="space-y-4">
             <SocialAuthButtons redirectTo="/flow/auth" />
             <p className="text-xs text-center text-muted-foreground text-pretty">
-              By continuing, you agree to our{' '}
+              Үргэлжлүүлснээр та манай{' '}
               <a href="#" className="underline hover:text-foreground transition-colors">
-                Terms of Service
+                Үйлчилгээний нөхцөл
               </a>{' '}
-              and{' '}
+              болон{' '}
               <a href="#" className="underline hover:text-foreground transition-colors">
-                Privacy Policy
+                Нууцлалын бодлого
               </a>
             </p>
           </div>
@@ -53,7 +53,7 @@ export default async function AuthStepPage() {
         <div className="max-w-2xl mx-auto">
           <Button variant="outline" size="lg" className="w-full bg-transparent">
             <IconArrowLeft className="size-4" />
-            Back to Capture
+            Зураг авах руу буцах
           </Button>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default async function AuthStepPage() {
       <div className="hidden md:flex fixed bottom-8 left-8 right-8 gap-2 justify-between">
         <Button variant="ghost" size="sm">
           <IconArrowLeft className="size-4" />
-          Back
+          Буцах
         </Button>
 
         <ContinueToAnalyticsButton />
