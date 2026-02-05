@@ -21,7 +21,7 @@ export default function LandingPage() {
             {/* Badge */}
             <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm text-primary">
               <IconSparkles className="h-3.5 w-3.5" />
-              Хиймэл оюунд суурилсан арьсны шинжилгээ
+              Хиймэл оюунд суурилсан арьсны оншилгоо
             </div>
 
             {/* Headline */}
