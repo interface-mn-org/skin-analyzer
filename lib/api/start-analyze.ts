@@ -1,6 +1,9 @@
 'use client'
 
-import type { StartAnalyzeApiError, StartAnalyzeResponse } from '@/types/files-api'
+import { apiRequest } from '@/lib/api/client-fetch'
+import type { StartAnalyzeResponse } from '@/types/files-api'
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8081'
 
 /**
  * Start-analyze flow: send file metadata to POST /api/start-analyze,
@@ -8,7 +11,10 @@ import type { StartAnalyzeApiError, StartAnalyzeResponse } from '@/types/files-a
  * Returns file_id for use as src_file_id (e.g. create-task-and-poll).
  * This is a separate feature from /api/upload-image.
  */
-export async function startAnalyzeAndUpload(file: File): Promise<string> {
+export async function startAnalyzeAndUpload(
+  file: File,
+  accessToken: string,
+): Promise<string> {
   const metadata = {
     files: [
       {
@@ -19,19 +25,14 @@ export async function startAnalyzeAndUpload(file: File): Promise<string> {
     ],
   }
 
-  const res = await fetch('/api/start-analyze', {
+  const data = await apiRequest<StartAnalyzeResponse>('/api/start-analyze', {
+    accessToken,
+    baseUrl: API_BASE,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
     body: JSON.stringify(metadata),
   })
 
-  if (!res.ok) {
-    const data = (await res.json().catch(() => ({}))) as StartAnalyzeApiError
-    throw new Error(data.error || res.statusText || 'Start analyze failed')
-  }
-
-  const data = (await res.json()) as StartAnalyzeResponse
   const { upload_request, file_id } = data
   const putRes = await fetch(upload_request.url, {
     method: 'PUT',

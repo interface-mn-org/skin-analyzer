@@ -6,12 +6,11 @@ import Header from '@/components/header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { CAPTURED_IMAGES_KEY } from '@/lib/constants'
 import { YMKCapturedImage } from '@/types/ymk-camera-kit'
 import { IconArrowRight, IconCamera, IconCheck, IconRefresh, IconShield } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-
-const CAPTURED_IMAGES_KEY = 'skin-analyzer:capture-images'
 
 export default function FaceCapture() {
   const [capturedImages, setCapturedImages] = useState<YMKCapturedImage[]>([])

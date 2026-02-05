@@ -1,5 +1,6 @@
-import { getCreditsBalance } from '@/lib/api/credits'
 import { auth } from '@/lib/auth'
+import { creditsBalanceQueryOptions } from '@/lib/query/options'
+import { createQueryClient } from '@/lib/query/query-client'
 
 export async function CreditsBalanceCard() {
   const session = await auth()
@@ -13,7 +14,10 @@ export async function CreditsBalanceCard() {
     )
   }
 
-  const { credits_balance } = await getCreditsBalance()
+  const queryClient = createQueryClient()
+  const { credits_balance } = await queryClient.fetchQuery(
+    creditsBalanceQueryOptions(accessToken, session?.backendUser?.id),
+  )
   return (
     <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-xs font-medium text-foreground shadow-sm">
       <span className="text-muted-foreground">Credits</span>

@@ -1,4 +1,3 @@
-import { authorizedFetch } from '@/lib/api/authorized-fetch'
 import type {
   CompleteFileUploadResponse,
   FileApiError,
@@ -8,6 +7,12 @@ import type {
 } from '@/types/files-api'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8081'
+
+function withAuthHeaders(accessToken: string, init?: HeadersInit) {
+  const headers = new Headers(init)
+  headers.set('Authorization', `Bearer ${accessToken}`)
+  return headers
+}
 
 async function parseFileApiError(res: Response): Promise<FileApiError> {
   const text = await res.text()
@@ -20,29 +25,37 @@ async function parseFileApiError(res: Response): Promise<FileApiError> {
 
 async function parseFileApiResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
-    throw await parseFileApiError(res)
+    const err = await parseFileApiError(res)
+    throw new Error(err.error || res.statusText)
   }
 
   return res.json()
 }
 
 export async function requestFileUpload(
+  accessToken: string,
   body: RequestFileUploadBody,
 ): Promise<RequestFileUploadResponse> {
-  const res = await authorizedFetch(`${API_BASE}/files/upload`, {
+  const res = await fetch(`${API_BASE}/files/upload`, {
     method: 'POST',
-    headers: {
+    headers: withAuthHeaders(accessToken, {
       'Content-Type': 'application/json',
-    },
+    }),
     body: JSON.stringify(body),
+    cache: 'no-store',
   })
 
   return parseFileApiResponse(res)
 }
 
-export async function completeFileUpload(fileId: string): Promise<CompleteFileUploadResponse> {
-  const res = await authorizedFetch(`${API_BASE}/files/${fileId}/complete`, {
+export async function completeFileUpload(
+  accessToken: string,
+  fileId: string,
+): Promise<CompleteFileUploadResponse> {
+  const res = await fetch(`${API_BASE}/files/${fileId}/complete`, {
     method: 'POST',
+    headers: withAuthHeaders(accessToken),
+    cache: 'no-store',
   })
 
   return parseFileApiResponse(res)
@@ -50,7 +63,10 @@ export async function completeFileUpload(fileId: string): Promise<CompleteFileUp
 
 export type UploadImageResult = FileRecord
 
-export async function uploadImageFile(file: File): Promise<UploadImageResult> {
+export async function uploadImageFile(
+  accessToken: string,
+  file: File,
+): Promise<UploadImageResult> {
   const extension = (() => {
     const parts = file.name.split('.')
     if (parts.length <= 1) return ''
@@ -67,9 +83,10 @@ export async function uploadImageFile(file: File): Promise<UploadImageResult> {
     },
   }
 
-  const { file: createdFile, upload_url, headers } = await requestFileUpload(requestBody)
-  console.log('upload_url', upload_url)
-  console.log('headers', headers)
+  const { file: createdFile, upload_url, headers } = await requestFileUpload(
+    accessToken,
+    requestBody,
+  )
   const s3Res = await fetch(upload_url, {
     method: 'PUT',
     headers,
@@ -82,7 +99,7 @@ export async function uploadImageFile(file: File): Promise<UploadImageResult> {
     } satisfies FileApiError
   }
 
-  const { file: completedFile } = await completeFileUpload(createdFile.id)
+  const { file: completedFile } = await completeFileUpload(accessToken, createdFile.id)
 
   return completedFile
 }

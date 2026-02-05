@@ -39,6 +39,7 @@ export async function apiListResults(options: {
   const base = options.baseUrl ?? ''
   const res = await fetch(`${base}/api/results`, {
     headers: { Authorization: `Bearer ${options.token}` },
+    cache: 'no-store',
   })
   if (!res.ok) {
     const err = (await res.json()) as ApiErrorResponse
@@ -56,6 +57,7 @@ export async function apiGetResultById(
   const base = options.baseUrl ?? ''
   const res = await fetch(`${base}/api/results/${id}`, {
     headers: { Authorization: `Bearer ${options.token}` },
+    cache: 'no-store',
   })
   if (!res.ok) {
     const err = (await res.json()) as ApiErrorResponse

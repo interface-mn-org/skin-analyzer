@@ -1,3 +1,4 @@
+import { QueryProvider } from '@/components/query-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import type { Metadata, Viewport } from 'next'
@@ -49,8 +50,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider>
-            {children}
-            <Toaster position="top-center" closeButton richColors />
+            <QueryProvider>
+              {children}
+              <Toaster position="top-center" closeButton richColors />
+            </QueryProvider>
           </SessionProvider>
         </ThemeProvider>
       </body>

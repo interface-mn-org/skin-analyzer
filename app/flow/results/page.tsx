@@ -1,7 +1,9 @@
 import { ResultsStepView } from '@/components/results/results-step-view'
 import ResultsStepWrapper from '@/components/results/results-step-wrapper'
-import { getCreditsBalance } from '@/lib/api/credits'
 import { auth } from '@/lib/auth'
+import { CREDITS_REQUIRED } from '@/lib/constants'
+import { creditsBalanceQueryOptions } from '@/lib/query/options'
+import { createQueryClient } from '@/lib/query/query-client'
 import { redirect } from 'next/navigation'
 
 export default async function ResultsStep() {
@@ -11,8 +13,15 @@ export default async function ResultsStep() {
     redirect('/flow/capture')
   }
 
-  const userCredits = await getCreditsBalance()
-  const hasEnoughCredits = userCredits.credits_balance >= 10
+  const accessToken = session?.backendTokens?.accessToken
+  if (!accessToken) {
+    redirect('/flow/capture')
+  }
+  const queryClient = createQueryClient()
+  const userCredits = await queryClient.fetchQuery(
+    creditsBalanceQueryOptions(accessToken, session.backendUser?.id),
+  )
+  const hasEnoughCredits = userCredits.credits_balance >= CREDITS_REQUIRED
 
   if (!hasEnoughCredits) {
     redirect('/flow/payment')
