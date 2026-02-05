@@ -10,10 +10,11 @@ import type {
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8081'
 
 async function parseFileApiError(res: Response): Promise<FileApiError> {
+  const text = await res.text()
   try {
-    return await res.json()
+    return JSON.parse(text) as FileApiError
   } catch {
-    return { error: await res.text() }
+    return { error: text || res.statusText }
   }
 }
 
