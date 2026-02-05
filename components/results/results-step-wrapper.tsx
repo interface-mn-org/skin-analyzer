@@ -7,7 +7,7 @@ import { CAPTURED_IMAGES_KEY } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { toast } from 'sonner'
 import { Spinner } from '../ui/spinner'
 type StoredCapture = {
@@ -76,22 +76,27 @@ export default function ResultsStepWrapper({ children }: { children: React.React
 
       return { youCamFileId, taskId }
     },
-    onSuccess: (result) => {
-      if (result) {
-        sessionStorage.removeItem(CAPTURED_IMAGES_KEY)
-        const params = new URLSearchParams()
-        params.set('id', result.youCamFileId)
-        params.set('taskId', result.taskId)
-        router.replace(`/flow/results?${params.toString()}`)
-      }
-    },
-    onError: (error) => {
+  })
+
+  useEffect(() => {
+    if (uploadQuery.isSuccess && uploadQuery.data) {
+      sessionStorage.removeItem(CAPTURED_IMAGES_KEY)
+      const params = new URLSearchParams()
+      params.set('id', uploadQuery.data.youCamFileId)
+      params.set('taskId', uploadQuery.data.taskId)
+      router.replace(`/flow/results?${params.toString()}`)
+    }
+  }, [router, uploadQuery.data, uploadQuery.isSuccess])
+
+  useEffect(() => {
+    if (uploadQuery.isError) {
+      const error = uploadQuery.error
       toast.error(
         error instanceof Error ? error.message : 'Зургуудыг серверт байршуулахад алдаа гарлаа.',
       )
       router.push('/flow/capture')
-    },
-  })
+    }
+  }, [router, uploadQuery.error, uploadQuery.isError])
 
   const isUploading =
     !existingId &&
