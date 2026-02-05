@@ -3,16 +3,8 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import type { Metadata, Viewport } from 'next'
 import { SessionProvider } from 'next-auth/react'
-import { Manrope, Noto_Sans } from 'next/font/google'
 
 import './globals.css'
-
-const notoSans = Noto_Sans({ variable: '--font-sans' })
-
-const manrope = Manrope({
-  variable: '--font-manrope',
-  subsets: ['latin'],
-})
 
 export const metadata: Metadata = {
   title: 'Арьсны шинжилгээ',
@@ -39,9 +31,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="mn" className={manrope.variable} suppressHydrationWarning>
+    <html lang="mn" suppressHydrationWarning>
       <body
-        className={`${manrope.variable} antialiased bg-linear-to-b from-background via-background to-muted/40`}
+        className="antialiased bg-linear-to-b from-background via-background to-muted/40"
       >
         <ThemeProvider
           attribute="class"
