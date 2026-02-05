@@ -1,3 +1,5 @@
+'use client'
+
 import { ResultsByIdClient } from '@/components/results/results-by-id-client'
 import type { ResultResponse } from '@/lib/api/result'
 

@@ -1,10 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { checkCreditPurchase } from '@/lib/api/credits'
+import { queryKeys } from '@/lib/query/query-keys'
 import { cn } from '@/lib/utils'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { IconArrowRight } from '@tabler/icons-react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import { toast } from 'sonner'
 import { Spinner } from '../ui/spinner'
 
@@ -21,51 +24,60 @@ export function CheckPurchaseButton({
   size = 'lg',
   className,
 }: CheckPurchaseButtonProps) {
-  const [isChecking, setIsChecking] = useState(false)
   const router = useRouter()
+  const { data: session } = useSession()
+  const accessToken = session?.backendTokens?.accessToken
+  const userId = session?.backendUser?.id
+  const queryClient = useQueryClient()
 
-  const handleCheck = async () => {
-    if (disabled || isChecking) return
-    if (!purchaseId) {
-      toast.error('Missing purchase ID. Please refresh and try again.')
-      return
-    }
-    setIsChecking(true)
-    try {
-      const res = await fetch('/api/check-purchase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ purchaseId }),
-      })
-      const data = (await res.json()) as {
-        ok?: boolean
-        paid?: boolean
-        error?: string
+  const checkMutation = useMutation({
+    mutationFn: async () => {
+      if (!accessToken) {
+        throw new Error('Нэвтэрсэн эрх баталгаажаагүй байна.')
       }
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || 'Unable to check payment status.')
+      if (!purchaseId) {
+        throw new Error('Төлбөрийн дугаар олдсонгүй. Дахин оролдоно уу.')
       }
+      return checkCreditPurchase(accessToken, purchaseId)
+    },
+    onSuccess: (data) => {
       if (data.paid) {
+        if (userId) {
+          queryClient.setQueryData(queryKeys.creditsBalance(userId), {
+            credits_balance: data.credits_balance,
+          })
+          queryClient.invalidateQueries({ queryKey: queryKeys.creditPurchases(userId) })
+        }
+        toast.success('Төлбөр амжилттай баталгаажлаа.')
         router.push('/flow/results')
         return
       }
-      toast.info('Payment not received yet. Please try again shortly.')
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Unable to check payment status.')
-    } finally {
-      setIsChecking(false)
+      toast.info('Төлбөр хараахан баталгаажаагүй байна. Түр хүлээгээд дахин шалгана уу.')
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Төлбөрийн төлөв шалгахад алдаа гарлаа.')
+    },
+  })
+
+  const handleCheck = async () => {
+    if (disabled || checkMutation.isPending) return
+    if (!purchaseId) {
+      toast.error('Төлбөрийн дугаар олдсонгүй. Дахин оролдоно уу.')
+      return
     }
+    checkMutation.mutate()
   }
 
   return (
     <Button
       size={size}
-      disabled={disabled || isChecking}
+      disabled={disabled || checkMutation.isPending}
       className={cn('cursor-pointer', className)}
       onClick={handleCheck}
+      aria-busy={checkMutation.isPending}
     >
-      {isChecking ? <Spinner /> : null}
-      I have paid <IconArrowRight className="size-4" />
+      {checkMutation.isPending ? <Spinner /> : null}
+      {checkMutation.isPending ? 'Шалгаж байна…' : 'Төлсөн'} <IconArrowRight className="size-4" />
     </Button>
   )
 }

@@ -2,6 +2,7 @@
 
 import { IconAlertCircle, IconArrowRight, IconCheck } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
+import { CAPTURED_IMAGES_KEY } from '@/lib/constants'
 import {
   Avatar,
   AvatarBadge,
@@ -10,8 +11,6 @@ import {
   AvatarGroupCount,
   AvatarImage,
 } from '../ui/avatar'
-
-const CAPTURED_IMAGES_KEY = 'skin-analyzer:capture-images'
 
 export function CapturedImagePreview() {
   const [image, setImage] = useState<string | null>(null)

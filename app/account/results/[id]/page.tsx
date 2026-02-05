@@ -1,9 +1,9 @@
-import { ResultsByIdView } from '@/components/results/results-by-id-view'
-import { apiGetResultById } from '@/lib/api/result'
+import { ResultsByIdQuery } from '@/components/results/results-by-id-query'
 import { auth } from '@/lib/auth'
+import { resultByIdQueryOptions } from '@/lib/query/options'
+import { createQueryClient } from '@/lib/query/query-client'
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query'
 import { notFound, redirect } from 'next/navigation'
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8081'
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -20,13 +20,11 @@ export default async function AccountResultsByIdPage({ params }: Props) {
   }
 
   const { id } = await params
+  const queryClient = createQueryClient()
 
   let result
   try {
-    result = await apiGetResultById(id, {
-      baseUrl: API_BASE,
-      token: accessToken,
-    })
+    result = await queryClient.fetchQuery(resultByIdQueryOptions(accessToken, id))
   } catch {
     notFound()
   }
@@ -35,5 +33,9 @@ export default async function AccountResultsByIdPage({ params }: Props) {
     notFound()
   }
 
-  return <ResultsByIdView result={result} />
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ResultsByIdQuery resultId={id} />
+    </HydrationBoundary>
+  )
 }

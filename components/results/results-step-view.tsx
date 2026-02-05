@@ -12,6 +12,8 @@ import { ResultsRevealOverlay } from '@/components/results/results-reveal-overla
 import { ResultsSummary } from '@/components/results/results-summary'
 import type { AnalysisImage } from '@/components/results/types'
 import { getTaskStatus } from '@/lib/api/poll-status'
+import { useMutation } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -23,9 +25,35 @@ export function ResultsStepView() {
   const searchParams = useSearchParams()
   const taskId = searchParams.get('taskId')
   const [isRevealed, setIsRevealed] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isRevealLoading, setIsRevealLoading] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
+  const { data: session } = useSession()
+  const accessToken = session?.backendTokens?.accessToken
+
+  const statusMutation = useMutation({
+    mutationFn: async () => {
+      if (!taskId) {
+        throw new Error('Даалгаврын дугаар олдсонгүй.')
+      }
+      if (!accessToken) {
+        throw new Error('Нэвтэрсэн эрх баталгаажаагүй байна.')
+      }
+      return getTaskStatus(taskId, accessToken)
+    },
+    onSuccess: ({ data, resultId }) => {
+      if (data.task_status === 'success') {
+        router.replace(`/account/results/${resultId ?? taskId}`)
+        return
+      }
+      toast.error(data.error_code ?? `Task status: ${data.task_status}`)
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Үр дүнг авахад алдаа гарлаа.')
+    },
+  })
+
+  const isLoading = isRevealLoading || statusMutation.isPending
 
   const galleryImages: AnalysisImage[] = []
 
@@ -57,32 +85,22 @@ export function ResultsStepView() {
   }
 
   const handleRevealClick = async () => {
-    setIsLoading(true)
-    if (taskId) {
-      try {
-        const { data, resultId } = await getTaskStatus(taskId)
-        if (data.task_status === 'success') {
-          router.replace(`/account/results/${resultId ?? taskId}`)
-          return
-        } else {
-          setIsLoading(false)
-          toast.error(data.error_code ?? `Task status: ${data.task_status}`)
-        }
-      } catch (e) {
-        setIsLoading(false)
-        toast.error(e instanceof Error ? e.message : 'Failed to load results')
-      }
+    if (isLoading) return
+    if (!taskId) {
+      setIsRevealLoading(true)
+      return
     }
+    statusMutation.mutate()
   }
 
   useEffect(() => {
-    if (!isLoading || taskId) return
+    if (!isRevealLoading || taskId) return
     const t = setTimeout(() => {
-      setIsLoading(false)
+      setIsRevealLoading(false)
       setIsRevealed(true)
     }, LOADING_DURATION_MS)
     return () => clearTimeout(t)
-  }, [isLoading, taskId])
+  }, [isRevealLoading, taskId])
 
   return (
     <div className="min-h-svh bg-background relative">
@@ -105,7 +123,9 @@ export function ResultsStepView() {
         </main>
       </div>
 
-      {!isRevealed && !isLoading && <ResultsRevealOverlay onReveal={handleRevealClick} />}
+      {!isRevealed && (
+        <ResultsRevealOverlay onReveal={handleRevealClick} isLoading={isLoading} />
+      )}
 
       {isLoading && <ResultsLoadingScreen durationMs={LOADING_DURATION_MS} />}
 
